@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ConfigRequest {
   final String baseUrl;
   final String token;
+  final String iosCancelButton;
   final String title;
   final Color toolBarTitleColor;
   final Color toolBarBackgroundColor;
@@ -11,6 +12,7 @@ class ConfigRequest {
     @required this.baseUrl,
     @required this.token,
     this.title = "My fatoorah payment",
+    this.iosCancelButton = "Cancel",
     this.toolBarTitleColor = Colors.white,
     this.toolBarBackgroundColor = Colors.blueAccent,
   });
@@ -34,6 +36,7 @@ class ConfigRequest {
       "baseUrl": baseUrl,
       "token": token,
       "title": title,
+      "cancelButton": iosCancelButton,
       "toolBarTitleColor": _colorHex(toolBarTitleColor),
       "toolBarBackgroundColor": _colorHex(toolBarBackgroundColor),
     };
