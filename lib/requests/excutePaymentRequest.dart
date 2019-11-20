@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import '../enums/currencyIsoIos.dart';
+import '../enums/language.dart';
 
 class ExcutePaymentRequest {
   final String currencyIsoDisplay;
-  final String language;
+  final ApiLanguage language;
   final double invoiceAmount;
   final String callBackUrl;
   final String errorUrl;
@@ -12,7 +14,7 @@ class ExcutePaymentRequest {
     @required this.errorUrl,
     @required this.paymentMethod,
     this.currencyIsoDisplay = "ريال",
-    this.language = "AR",
+    this.language = ApiLanguage.Arabic,
     @required this.invoiceAmount,
   });
 
@@ -20,7 +22,7 @@ class ExcutePaymentRequest {
     return {
       "currencyIso": currencyIsoDisplay,
       "invoiceAmount": invoiceAmount,
-      "language": language,
+      "language": iosLanguages[language],
       "callBackUrl": callBackUrl,
       "errorUrl": errorUrl,
       "paymentMethod": paymentMethod,

@@ -6,7 +6,7 @@ PODS:
   - MyFatoorah (2.0.24)
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios-release`)
+  - Flutter (from `.symlinks/flutter/ios`)
   - my_fatoorah (from `.symlinks/plugins/my_fatoorah/ios`)
 
 SPEC REPOS:
@@ -15,7 +15,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios-release"
+    :path: ".symlinks/flutter/ios"
   my_fatoorah:
     :path: ".symlinks/plugins/my_fatoorah/ios"
 

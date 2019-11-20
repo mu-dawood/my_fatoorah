@@ -2,7 +2,7 @@ import Flutter
 import UIKit
 import MFSDK
 
-public class SwiftMyFatoorahPlugin: NSObject, FlutterPlugin , UINavigationControllerDelegate,MFInvoiceCreateStatusDelegate {
+public class SwiftMyFatoorahPlugin: NSObject, FlutterPlugin , UINavigationControllerDelegate {
   var results : FlutterResult!
   var navigationController: UINavigationController!
   override init(){
@@ -24,89 +24,95 @@ public class SwiftMyFatoorahPlugin: NSObject, FlutterPlugin , UINavigationContro
     else if(call.method.elementsEqual("executePayment")){
         executePayment(call,result);
     }
-    else
+    else{
         result(FlutterMethodNotImplemented);
+    }
   }
 
-  public func config(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-     do {
+  public func config(_ call: FlutterMethodCall,_ result: @escaping FlutterResult) {
         let arguments = call.arguments as! NSDictionary
         let baseUrl = arguments["baseUrl"] as! String
-        let token = arguments["token"] as! String?
-        let title = arguments["title"] as! String?
-        let cancelButton = arguments["cancelButton"] as! String?
+        let token = arguments["token"] as! String
+        let title = arguments["title"] as! String
+        let cancelBtn = arguments["cancelButton"] as! String
         let toolBarTitleColor = arguments["toolBarTitleColor"] as! String
         let toolBarBackgroundColor = arguments["toolBarBackgroundColor"] as! String
-        MFSettings.shared.configure(token: token, baseURL: baseURL)
-        let them = MFTheme(navigationTintColor: UIColor(hexString: toolBarTitleColor), navigationBarTintColor: UIColor(hexString: toolBarBackgroundColor), navigationTitle:title, cancelButtonTitle: cancelButton)
+        MFSettings.shared.configure(token: token, baseURL: baseUrl)
+        let them = MFTheme(navigationTintColor: UIColor(hexString: toolBarTitleColor), navigationBarTintColor: UIColor(hexString: toolBarBackgroundColor), navigationTitle:title, cancelButtonTitle: cancelBtn)
         MFSettings.shared.setTheme(theme: them)
         result("Initialized")
-      } catch {
-            result(FlutterError(code: "Exeption",
-                        message: error.localizedDescription,
-                        details: nil))
-       }
+      
   }
 
 
-  public func initiatePayment(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-   do {
+  public func initiatePayment(_ call: FlutterMethodCall,_ result: @escaping FlutterResult) {
         let arguments = call.arguments as! NSDictionary
-        let currencyIso = arguments["currencyIso"] as! String
+        let currencyIso = arguments["currencyIsoIos"] as! String
         let language = arguments["language"] as! String
         let invoiceAmount = arguments["invoiceAmount"] as! Double
-        let initiatePayment = MFInitiatePaymentRequest(invoiceAmount: invoiceAmount, currencyIso: currencyIso)
-        MFPaymentRequest.shared.initiatePayment(request: initiatePayment, apiLanguage: language) { [weak self] (response) in
+    
+        let currency=MFCurrencyISO(rawValue: currencyIso) ?? MFCurrencyISO.saudiArabia_SAR
+        let lang=MFAPILanguage(rawValue: language) ?? MFAPILanguage.english
+        let initiatePayment = MFInitiatePaymentRequest(invoiceAmount: invoiceAmount, currencyIso: currency)
+        MFPaymentRequest.shared.initiatePayment(request: initiatePayment, apiLanguage: lang) { [weak self] (response) in
+            do{
             switch response {
             case .success(let initiatePaymentResponse):
                let encoder = JSONEncoder()
                let jsonData = try encoder.encode(initiatePaymentResponse)
                if let jsonString = String(data: jsonData, encoding: .utf8) {
-                results(jsonString)
+                result(jsonString)
                }
             case .failure(let failError):
                 result(FlutterError(code: "Failed",
-                        message: failError,
+                                    message: failError.errorDescription,
                         details: nil))
+                }
+                
+            }
+            catch {
+                 result(FlutterError(code: "Exeption",
+                             message: error.localizedDescription,
+                             details: nil))
             }
         }
 
-      } catch {
-            result(FlutterError(code: "Exeption",
-                        message: error.localizedDescription,
-                        details: nil))
-       }
+      
   }
 
 
-  public func executePayment(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-   do {
+  public func executePayment(_ call: FlutterMethodCall,_ result: @escaping FlutterResult) {
+  
         let arguments = call.arguments as! NSDictionary
         let callBackUrl = arguments["callBackUrl"] as! String
         let errorUrl = arguments["errorUrl"] as! String
         let language = arguments["language"] as! String
         let invoiceAmount = arguments["invoiceAmount"] as! Double
         let paymentMethod = arguments["paymentMethod"] as! Int
+         let lang=MFAPILanguage(rawValue: language) ?? MFAPILanguage.english
         let request = MFExecutePaymentRequest(invoiceValue: invoiceAmount, paymentMethod:paymentMethod,callBackUrl:callBackUrl,errorUrl:errorUrl)
-        MFPaymentRequest.shared.executePayment(request: request, apiLanguage: language) { [weak self] (response,invoiceId) in
+        MFPaymentRequest.shared.executePayment(request: request, apiLanguage: lang) { [weak self] (response,invoiceId) in
+            do{
             switch response {
             case .success(let executePaymentResponse):
                let encoder = JSONEncoder()
                let jsonData = try encoder.encode(executePaymentResponse)
                if let jsonString = String(data: jsonData, encoding: .utf8) {
-                results(jsonString)
+                result(jsonString)
                }
             case .failure(let failError):
                 result(FlutterError(code: "Failed",
-                        message: failError,
+                                    message: failError.errorDescription,
                         details: nil))
+                }
+            }
+            catch {
+                 result(FlutterError(code: "Exeption",
+                             message: error.localizedDescription,
+                             details: nil))
             }
         }
-      } catch {
-            result(FlutterError(code: "Exeption",
-                        message: error.localizedDescription,
-                        details: nil))
-       }
+     
   }
 }
 

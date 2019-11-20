@@ -22,6 +22,7 @@ class _MyAppState extends State<MyApp> {
     MyFatoorah.config(ConfigRequest(
       baseUrl: "https://apitest.myfatoorah.com",
       title: "الدفع الإلكترونى",
+      iosCancelButton: "إلغاء",
       token:
           "7Fs7eBv21F5xAocdPvvJ-sCqEyNHq4cygJrQUFvFiWEexBUPs4AkeLQxH4pzsUrY3Rays7GVA6SojFCz2DMLXSJVqk8NG-plK-cZJetwWjgwLPub_9tQQohWLgJ0q2invJ5C5Imt2ket_-JAlBYLLcnqp_WmOfZkBEWuURsBVirpNQecvpedgeCx4VaFae4qWDI_uKRV1829KCBEH84u6LYUxh8W_BYqkzXJYt99OlHTXHegd91PLT-tawBwuIly46nwbAs5Nt7HFOozxkyPp8BW9URlQW1fE4R_40BXzEuVkzK3WAOdpR92IkV94K_rDZCPltGSvWXtqJbnCpUB6iUIn1V-Ki15FAwh_nsfSmt_NQZ3rQuvyQ9B3yLCQ1ZO_MGSYDYVO26dyXbElspKxQwuNRot9hi3FIbXylV3iN40-nCPH4YQzKjo5p_fuaKhvRh7H8oFjRXtPtLQQUIDxk-jMbOp7gXIsdz02DrCfQIihT4evZuWA6YShl6g8fnAqCy8qRBf_eLDnA9w-nBh4Bq53b1kdhnExz0CMyUjQ43UO3uhMkBomJTXbmfAAHP8dZZao6W8a34OktNQmPTbOHXrtxf6DS-oKOu3l79uX_ihbL8ELT40VjIW3MJeZ_-auCPOjpE3Ax4dzUkSDLCljitmzMagH2X8jN8-AYLl46KcfkBV",
     )).then((d) {
@@ -45,6 +46,10 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text(loading ? "دفع ماى فاتورة" : "إختر طريقة الدفع"),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: intaitePayment,
+          child: Icon(Icons.sync),
+        ),
         body: Column(
           children: <Widget>[
             if (loading == true) LinearProgressIndicator(),
@@ -55,7 +60,6 @@ class _MyAppState extends State<MyApp> {
                   return ListTile(
                     onTap: () {
                       excutePayment(method.paymentMethodId);
-                      // intaitePayment();
                     },
                     leading: Image.network(method.imageUrl),
                     title: Text(method.paymentMethodAr),
