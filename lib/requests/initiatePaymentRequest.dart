@@ -17,7 +17,7 @@ class InitiatePaymentRequest {
     return {
       "currencyIso": currencies[currencyIso],
       "invoiceAmount": invoiceAmount,
-      "language": iosLanguages[language],
+      "language": languages[language],
     };
   }
 }

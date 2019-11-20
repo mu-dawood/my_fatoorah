@@ -23,7 +23,8 @@ class PaymentMethod {
     _paymentMethodAr = json['PaymentMethodAr'] ?? "";
     _paymentMethodEn = json['PaymentMethodEn'] ?? "";
     _paymentMethodId = json['PaymentMethodId'];
-    _serviceCharge =double.tryParse(json['ServiceCharge']?.toString() ?? "0.0");
-    _totalAmount =double.tryParse(json['TotalAmount']?.toString() ?? "0.0");
+    _serviceCharge =
+        double.tryParse(json['ServiceCharge']?.toString() ?? "0.0");
+    _totalAmount = double.tryParse(json['TotalAmount']?.toString() ?? "0.0");
   }
 }

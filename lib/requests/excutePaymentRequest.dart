@@ -22,7 +22,7 @@ class ExcutePaymentRequest {
     return {
       //"currencyIso": currencyIsoDisplay,
       "invoiceAmount": invoiceAmount,
-      "language": iosLanguages[language],
+      "language": languages[language],
       "callBackUrl": callBackUrl,
       "errorUrl": errorUrl,
       "paymentMethod": paymentMethod,
