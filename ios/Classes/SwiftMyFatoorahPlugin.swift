@@ -47,7 +47,7 @@ public class SwiftMyFatoorahPlugin: NSObject, FlutterPlugin , UINavigationContro
 
   public func initiatePayment(_ call: FlutterMethodCall,_ result: @escaping FlutterResult) {
         let arguments = call.arguments as! NSDictionary
-        let currencyIso = arguments["currencyIsoIos"] as! String
+        let currencyIso = arguments["currencyIso"] as! String
         let language = arguments["language"] as! String
         let invoiceAmount = arguments["invoiceAmount"] as! Double
     

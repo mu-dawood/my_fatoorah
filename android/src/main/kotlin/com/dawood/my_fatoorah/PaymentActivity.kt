@@ -9,7 +9,6 @@ import com.myfatoorah.sdk.model.executepayment.MFExecutePaymentRequest
 import com.myfatoorah.sdk.model.paymentstatus.MFGetPaymentStatusResponse
 import com.myfatoorah.sdk.views.MFResult
 import com.myfatoorah.sdk.views.MFSDK
-import android.util.Log;
 class PaymentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
