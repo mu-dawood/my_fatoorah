@@ -10,10 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter:
   plugin:
     androidPackage: com.dawood.my_fatoorah
     pluginClass: MyFatoorahPlugin
