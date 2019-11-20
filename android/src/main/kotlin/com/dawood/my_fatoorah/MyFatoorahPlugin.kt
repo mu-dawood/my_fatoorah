@@ -56,8 +56,8 @@ class MyFatoorahPlugin : MethodCallHandler, PluginRegistry.ActivityResultListene
     private fun initiatePayment(call: MethodCall, result: Result) {
         try {
             val arguments = call.arguments as Map<String, Any>
-            val currencyIso = arguments["currencyIso"] as String?
-            val language = arguments["language"] as String?
+            val currencyIso = arguments["currencyIso"] as String
+            val language = arguments["language"] as String
             val invoiceAmount = arguments["invoiceAmount"] as Double
             val request = MFInitiatePaymentRequest(invoiceAmount, currencyIso)
             MFSDK.initiatePayment(request, language!!) { _result: MFResult<MFInitiatePaymentResponse> ->
