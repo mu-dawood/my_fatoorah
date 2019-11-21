@@ -21,6 +21,7 @@ class MyFatoorah {
     return _channel
         .invokeMethod('initiatePayment', request.tojson())
         .then((data) {
+      print(data);
       var json = jsonDecode(data);
       List list = json["PaymentMethods"];
       return list.map((item) => PaymentMethod.fromJson(item)).toList();

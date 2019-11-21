@@ -70,7 +70,6 @@ class MyFatoorahPlugin : MethodCallHandler, PluginRegistry.ActivityResultListene
                         is MFResult.Fail -> {
                             val error = (_result as MFResult.Fail<*>).error
                             val response = Gson().toJson(error)
-
                             result.error("Failed", error.message, response)
                         
                         }
