@@ -1,41 +1,31 @@
-import 'dart:async';
-import 'dart:convert';
+library my_fatoorah;
 
-import 'package:flutter/services.dart';
-import 'package:my_fatoorah/requests/excutePaymentRequest.dart';
-import 'package:my_fatoorah/responses/paymentMethod.dart';
+import 'package:my_fatoorah/requests/my_fatoorah_request.dart';
+import 'package:flutter/material.dart';
+import 'responses/Initiate_payment_response.dart';
+import 'ui/payment_methods_dialog.dart';
 
-import 'requests/configRequest.dart';
-import 'requests/initiatePaymentRequest.dart';
-import 'responses/paymentResult.dart';
+export './requests/my_fatoorah_request.dart';
+export './responses/Initiate_payment_response.dart';
+export './enums/currencyIso.dart';
+export './responses/Initiate_payment_response.dart';
+export './enums/language.dart';
 
 class MyFatoorah {
-  static const MethodChannel _channel = const MethodChannel('my_fatoorah');
-
-  static Future config(ConfigRequest request) {
-    return _channel.invokeMethod('config', request.tojson());
-  }
-
-  static Future<List<PaymentMethod>> initiatePayment(
-      InitiatePaymentRequest request) {
-    return _channel
-        .invokeMethod('initiatePayment', request.tojson())
-        .then((data) {
-      print(data);
-      var json = jsonDecode(data);
-      List list = json["PaymentMethods"];
-      return list.map((item) => PaymentMethod.fromJson(item)).toList();
-    });
-  }
-
-  static Future<PaymentResult> executePayment(ExcutePaymentRequest request) {
-    return _channel
-        .invokeMethod('executePayment', request.tojson())
-        .then((data) {
-      var json = jsonDecode(data);
-      return PaymentResult.fromJson(json);
-    }).catchError((e) {
-      print(e);
-    });
+  static Future<bool> startPayment({
+    @required BuildContext context,
+    Widget Function(PaymentMethod method) buildPaymentMethod,
+    @required MyfatoorahRequest request,
+  }) {
+    return showDialog(
+      context: context,
+      builder: (ctx) {
+        return Dialog(
+          child: PaymentMethosDialog(
+            request: request,
+          ),
+        );
+      },
+    );
   }
 }
