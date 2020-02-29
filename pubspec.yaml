@@ -1,7 +1,6 @@
 name: my_fatoorah
 description: My Fatoorah Payment SDK Integration works for android and ios
 version: 2.0.0
-author: Mohamed dawood <mo.ah.dawood@gmail.com>
 homepage: https://github.com/mo-ah-dawood/my_fatoorah
 
 environment:
