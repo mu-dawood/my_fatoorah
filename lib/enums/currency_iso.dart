@@ -1,3 +1,5 @@
+part of my_fatoorah;
+
 enum Country {
   Kuwait,
   SaudiArabia,
@@ -8,7 +10,7 @@ enum Country {
   Jordan,
 }
 
-Map<Country, String> currencies = {
+Map<Country, String> _currencies = {
   Country.Kuwait: "KWD",
   Country.SaudiArabia: "SAR",
   Country.Bahrain: "BHD",

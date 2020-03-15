@@ -1,13 +1,4 @@
-library my_fatoorah;
-
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import '../responses/Initiate_payment_response.dart';
-import '../requests/my_fatoorah_request.dart';
-import 'package:http/http.dart' as http;
-
-import 'payment_method.dart';
+part of my_fatoorah;
 
 class PaymentMethosDialog extends StatefulWidget {
   final MyfatoorahRequest request;
@@ -34,7 +25,7 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
         }).then((response) {
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
-        var _response = InitiatePaymentResponse.fromJson(json);
+        var _response = _InitiatePaymentResponse.fromJson(json);
         setState(() {
           methods = _response.isSuccess ? _response.data.paymentMethods : null;
           errorMessage = _response.isSuccess ? null : _response.message;
@@ -92,7 +83,7 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
               ),
             ),
             ...methods.map((e) {
-              return PaymentMethodItem(
+              return _PaymentMethodItem(
                 method: e.withLangauge(widget.request.language),
                 request: widget.request,
                 buildPaymentMethod: widget.buildPaymentMethod,

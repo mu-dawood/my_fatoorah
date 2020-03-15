@@ -1,3 +1,5 @@
+part of my_fatoorah;
+
 class CustomerAddress {
   /// Block number or area name that contains the delivery address
   String block;

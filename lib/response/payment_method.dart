@@ -1,27 +1,4 @@
-import '../my_fatoorah.dart';
-import 'base_response.dart';
-
-class InitiatePaymentResponse
-    extends MyFatoorahResponse<InitiatePaymentResponseData> {
-  InitiatePaymentResponse.fromJson(Map<String, dynamic> json)
-      : super.fromJson(json);
-  @override
-  InitiatePaymentResponseData mapData(Map<String, dynamic> json) {
-    return InitiatePaymentResponseData.fromJson(json);
-  }
-}
-
-class InitiatePaymentResponseData {
-  List<PaymentMethod> paymentMethods;
-  InitiatePaymentResponseData.fromJson(Map<String, dynamic> json) {
-    if (json['PaymentMethods'] != null) {
-      paymentMethods = new List<PaymentMethod>();
-      json['PaymentMethods'].forEach((v) {
-        paymentMethods.add(new PaymentMethod.fromJson(v));
-      });
-    }
-  }
-}
+part of my_fatoorah;
 
 class PaymentMethod {
   int paymentMethodId;

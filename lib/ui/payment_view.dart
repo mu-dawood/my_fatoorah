@@ -1,54 +1,103 @@
-import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+part of my_fatoorah;
 
-class PaymentView extends StatefulWidget {
+class _PaymentView extends StatefulWidget {
   final String url;
   final String success;
   final String error;
-  final bool forcePop;
+  final AfterPaymentBehaviour afterPaymentBehaviour;
 
-  PaymentView({
+  _PaymentView({
     Key key,
     @required this.url,
-    @required this.forcePop,
+    @required this.afterPaymentBehaviour,
     @required this.success,
     @required this.error,
   }) : super(key: key);
 
   @override
-  _PaymentViewState createState() => _PaymentViewState();
+  __PaymentViewState createState() => __PaymentViewState();
 }
 
-class _PaymentViewState extends State<PaymentView> {
+class __PaymentViewState extends State<_PaymentView> {
   WebViewController _controller;
+  bool _loading = true;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        if (_loading) return false;
         var current = await _controller.currentUrl() ?? "";
-        var success = current.contains(widget.success);
-        Navigator.of(context).pop(success);
+        Navigator.of(context).pop(getResponse(current));
         return false;
       },
       child: Scaffold(
         appBar: AppBar(),
-        body: WebView(
-          initialUrl: widget.url,
-          javascriptMode: JavascriptMode.unrestricted,
-          onPageFinished: (String url) {
-            if (widget.forcePop == true) {
-              var isSuccess = url.contains(widget.success);
-              var isError = url.contains(widget.error);
-              if (isSuccess || isError) {
-                Navigator.of(context).pop(isSuccess);
-              }
-            }
-          },
-          onWebViewCreated: (WebViewController controller) {
-            _controller = controller;
-          },
+        body: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child: WebView(
+                initialUrl: widget.url,
+                javascriptMode: JavascriptMode.unrestricted,
+                onPageStarted: (String url) {
+                  if (widget.afterPaymentBehaviour ==
+                      AfterPaymentBehaviour.BeforeCalbacksExecution) {
+                    var response = getResponse(url);
+                    if (response != null) {
+                      Navigator.of(context).pop(response);
+                      return;
+                    }
+                  }
+                  setState(() {
+                    _loading = true;
+                  });
+                },
+                onPageFinished: (String url) {
+                  if (widget.afterPaymentBehaviour ==
+                      AfterPaymentBehaviour.AfterCalbacksExecution) {
+                    var response = getResponse(url);
+                    if (response != null) {
+                      Navigator.of(context).pop(response);
+                      return;
+                    }
+                  }
+                  setState(() {
+                    _loading = false;
+                  });
+                },
+                onWebViewCreated: (WebViewController controller) {
+                  _controller = controller;
+                },
+              ),
+            ),
+            AnimatedPositioned(
+              left: 0,
+              right: 0,
+              top: 0,
+              duration: Duration(milliseconds: 300),
+              height: _loading ? MediaQuery.of(context).size.height : 0,
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 300),
+                opacity: _loading ? 1 : 0,
+                child: Container(
+                  color: Theme.of(context).scaffoldBackgroundColor ??
+                      Theme.of(context).backgroundColor,
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  PaymentResponse getResponse(String url) {
+    Uri uri = Uri.parse(url);
+    var isSuccess = url.contains(widget.success);
+    var isError = url.contains(widget.error);
+    if (!isError && !isSuccess) return null;
+    PaymentStatus status =
+        isSuccess ? PaymentStatus.Success : PaymentStatus.Error;
+    return PaymentResponse(status, uri.queryParameters["paymentId"]);
   }
 }

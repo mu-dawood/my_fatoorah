@@ -1,29 +1,21 @@
-import 'dart:convert';
+part of my_fatoorah;
 
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import '../responses/excute_payment_response.dart';
-
-import '../my_fatoorah.dart';
-import '../responses/Initiate_payment_response.dart';
-import 'payment_view.dart';
-
-class PaymentMethodItem extends StatefulWidget {
+class _PaymentMethodItem extends StatefulWidget {
   final PaymentMethod method;
   final MyfatoorahRequest request;
   final Widget Function(PaymentMethod method) buildPaymentMethod;
 
-  const PaymentMethodItem({
+  const _PaymentMethodItem({
     Key key,
     @required this.method,
     this.buildPaymentMethod,
     @required this.request,
   }) : super(key: key);
   @override
-  _PaymentMethodItemState createState() => _PaymentMethodItemState();
+  __PaymentMethodItemState createState() => __PaymentMethodItemState();
 }
 
-class _PaymentMethodItemState extends State<PaymentMethodItem>
+class __PaymentMethodItemState extends State<_PaymentMethodItem>
     with TickerProviderStateMixin {
   bool loading = false;
   String error;
@@ -41,7 +33,7 @@ class _PaymentMethodItemState extends State<PaymentMethodItem>
         }).then((response) {
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
-        var _response = ExcutePaymentResponse.fromJson(json);
+        var _response = _ExcutePaymentResponse.fromJson(json);
         if (_response.isSuccess) {
           setState(() {
             loading = false;
@@ -50,11 +42,11 @@ class _PaymentMethodItemState extends State<PaymentMethodItem>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PaymentView(
+                builder: (context) => _PaymentView(
                   url: _response.data.paymentURL,
                   success: widget.request.successUrl,
                   error: widget.request.errorUrl,
-                  forcePop: widget.request.finishAfterCallback == true,
+                  afterPaymentBehaviour: widget.request.afterPaymentBehaviour,
                 ),
               ),
             ).then((value) {

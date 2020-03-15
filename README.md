@@ -63,7 +63,8 @@ import 'package:my_fatoorah/my_fatoorah.dart';
                       invoiceAmount: 100,
                       language: ApiLanguage.Arabic,
                       token: null,
-                      finishAfterCallback: true),
+                      afterPaymentBehaviour:AfterPaymentBehaviour.None, //See the describe for this property for more details
+                      ),
                 );
 
 See the example for more details

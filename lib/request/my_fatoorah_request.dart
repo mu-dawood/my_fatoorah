@@ -1,10 +1,4 @@
-import 'package:flutter/foundation.dart';
-
-import '../enums/currencyIso.dart';
-import '../enums/language.dart';
-
-import 'customer_address.dart';
-import 'invoice_item.dart';
+part of my_fatoorah;
 
 ///The request that will be send to may fatoorah api
 ///
@@ -33,8 +27,14 @@ class MyfatoorahRequest {
       ? "https://api.myfatoorah.com"
       : "https://apitest.myfatoorah.com";
 
-  /// if value is true we will pop immediately after successUrl or errorUrl called
-  final bool finishAfterCallback;
+  /// this will controles what happen after payment done
+  ///
+  /// `AfterPaymentBehaviour.None` the default value , nothing will happen
+  ///
+  /// `AfterPaymentBehaviour.AfterCalbacksExecution` will pop after payment done and error or success callbacks finish
+  ///
+  /// `AfterPaymentBehaviour.BeforeCalbacksExecution` will pop after payment done and before error or success callbacks start
+  final AfterPaymentBehaviour afterPaymentBehaviour;
 
   final _testToken =
       "7Fs7eBv21F5xAocdPvvJ-sCqEyNHq4cygJrQUFvFiWEexBUPs4AkeLQxH4pzsUrY3Rays7GVA6SojFCz2DMLXSJVqk8NG-plK-cZJetwWjgwLPub_9tQQohWLgJ0q2invJ5C5Imt2ket_-JAlBYLLcnqp_WmOfZkBEWuURsBVirpNQecvpedgeCx4VaFae4qWDI_uKRV1829KCBEH84u6LYUxh8W_BYqkzXJYt99OlHTXHegd91PLT-tawBwuIly46nwbAs5Nt7HFOozxkyPp8BW9URlQW1fE4R_40BXzEuVkzK3WAOdpR92IkV94K_rDZCPltGSvWXtqJbnCpUB6iUIn1V-Ki15FAwh_nsfSmt_NQZ3rQuvyQ9B3yLCQ1ZO_MGSYDYVO26dyXbElspKxQwuNRot9hi3FIbXylV3iN40-nCPH4YQzKjo5p_fuaKhvRh7H8oFjRXtPtLQQUIDxk-jMbOp7gXIsdz02DrCfQIihT4evZuWA6YShl6g8fnAqCy8qRBf_eLDnA9w-nBh4Bq53b1kdhnExz0CMyUjQ43UO3uhMkBomJTXbmfAAHP8dZZao6W8a34OktNQmPTbOHXrtxf6DS-oKOu3l79uX_ihbL8ELT40VjIW3MJeZ_-auCPOjpE3Ax4dzUkSDLCljitmzMagH2X8jN8-AYLl46KcfkBV";
@@ -135,20 +135,20 @@ class MyfatoorahRequest {
     this.expiryDate,
     this.supplierCode,
     this.invoiceItems,
-    this.finishAfterCallback = false,
+    this.afterPaymentBehaviour = AfterPaymentBehaviour.None,
   });
   Map<String, dynamic> excutePaymentRequest(int paymentMethod) {
     var data = {
       "PaymentMethodId": paymentMethod,
       "CustomerName": customerName,
-      "DisplayCurrencyIso": currencies[currencyIso],
+      "DisplayCurrencyIso": _currencies[currencyIso],
       "MobileCountryCode": mobileCountryCode,
       "CustomerMobile": customerMobile,
       "CustomerEmail": customerEmail,
       "InvoiceValue": invoiceAmount,
       "CallBackUrl": successUrl,
       "ErrorUrl": errorUrl,
-      "Language": languages[language],
+      "Language": _languages[language],
       "CustomerReference": customerReference,
       "CustomerCivilId": customerCivilId,
       "UserDefinedField": userDefinedField,
@@ -165,9 +165,9 @@ class MyfatoorahRequest {
 
   Map<String, dynamic> intiatePaymentRequest() {
     return {
-      "currencyIso": currencies[currencyIso],
+      "currencyIso": _currencies[currencyIso],
       "invoiceAmount": invoiceAmount,
-      "language": languages[language],
+      "language": _languages[language],
     };
   }
 }

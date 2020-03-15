@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+part of my_fatoorah;
 
 class InvoiceItem {
   ///Invoice item name that will be displayed in the invoice

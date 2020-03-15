@@ -1,3 +1,8 @@
+## 2.1.0
+
+- Remove `finishAfterCallback` property
+- add `afterPaymentBehaviour` property
+
 ## 2.0.0
 
 - Remove platform specified code and use pure dart
@@ -7,11 +12,11 @@
 
 ## 1.0.1
 
-- TODO: Add internet permission for android
+- Add internet permission for android
 
 ## 1.0.0
 
-- TODO: Formatting code
+- Formatting code
 
 ## 0.0.1
 

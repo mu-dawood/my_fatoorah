@@ -42,16 +42,20 @@ class InnerPage extends StatelessWidget {
                 MyFatoorah.startPayment(
                   context: context,
                   request: MyfatoorahRequest(
-                      currencyIso: Country.SaudiArabia,
-                      successUrl:
-                          "https://assets.materialup.com/uploads/473ef52c-8b96-46f7-9771-cac4b112ae28/preview.png",
-                      errorUrl:
-                          "https://www.digitalpaymentguru.com/wp-content/uploads/2019/08/Transaction-Failed.png",
-                      invoiceAmount: 100,
-                      language: ApiLanguage.Arabic,
-                      token: null,
-                      finishAfterCallback: true),
-                );
+                    currencyIso: Country.SaudiArabia,
+                    successUrl:
+                        "https://assets.materialup.com/uploads/473ef52c-8b96-46f7-9771-cac4b112ae28/preview.png",
+                    errorUrl:
+                        "https://www.digitalpaymentguru.com/wp-content/uploads/2019/08/Transaction-Failed.png",
+                    invoiceAmount: 100,
+                    language: ApiLanguage.Arabic,
+                    token: null,
+                    afterPaymentBehaviour:
+                        AfterPaymentBehaviour.BeforeCalbacksExecution,
+                  ),
+                ).then((response) {
+                  print(response);
+                });
               },
               child: Text("دفع"),
             )
