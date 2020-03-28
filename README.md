@@ -19,7 +19,7 @@ my_fatoorah: any
 
 ```xml
 <key>io.flutter.embedded_views_preview</key>
-<true>
+<true/>
 ```
 
 ### if this url is not using ssl you have to use clear text traffic . put this value in your `manifest` for android

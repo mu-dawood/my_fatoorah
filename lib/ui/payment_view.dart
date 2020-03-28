@@ -18,14 +18,28 @@ class _PaymentView extends StatefulWidget {
   __PaymentViewState createState() => __PaymentViewState();
 }
 
-class __PaymentViewState extends State<_PaymentView> {
+class __PaymentViewState extends State<_PaymentView>
+    with SingleTickerProviderStateMixin {
   WebViewController _controller;
-  bool _loading = true;
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+      lowerBound: 0,
+      upperBound: 1,
+      value: 1,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (_loading) return false;
+        if (_animationController.value == 1) return false;
         var current = await _controller.currentUrl() ?? "";
         Navigator.of(context).pop(getResponse(current));
         return false;
@@ -47,9 +61,7 @@ class __PaymentViewState extends State<_PaymentView> {
                       return;
                     }
                   }
-                  setState(() {
-                    _loading = true;
-                  });
+                  _animationController.forward();
                 },
                 onPageFinished: (String url) {
                   if (widget.afterPaymentBehaviour ==
@@ -60,30 +72,33 @@ class __PaymentViewState extends State<_PaymentView> {
                       return;
                     }
                   }
-                  setState(() {
-                    _loading = false;
-                  });
+                  _animationController.animateBack(0);
                 },
                 onWebViewCreated: (WebViewController controller) {
                   _controller = controller;
                 },
               ),
             ),
-            AnimatedPositioned(
-              left: 0,
-              right: 0,
-              top: 0,
-              duration: Duration(milliseconds: 300),
-              height: _loading ? MediaQuery.of(context).size.height : 0,
-              child: AnimatedOpacity(
-                duration: Duration(milliseconds: 300),
-                opacity: _loading ? 1 : 0,
-                child: Container(
-                  color: Theme.of(context).scaffoldBackgroundColor ??
-                      Theme.of(context).backgroundColor,
-                  child: Center(child: CircularProgressIndicator()),
-                ),
-              ),
+            AnimatedBuilder(
+              animation: _animationController,
+              builder: (BuildContext context, Widget child) {
+                return Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: MediaQuery.of(context).size.height *
+                      _animationController.value,
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 300),
+                    opacity: _animationController.value,
+                    child: Container(
+                      color: Theme.of(context).scaffoldBackgroundColor ??
+                          Theme.of(context).backgroundColor,
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
