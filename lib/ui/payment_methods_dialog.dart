@@ -2,9 +2,15 @@ part of my_fatoorah;
 
 class PaymentMethosDialog extends StatefulWidget {
   final MyfatoorahRequest request;
-  final Widget Function(PaymentMethod method) buildPaymentMethod;
-  const PaymentMethosDialog({Key key, this.request, this.buildPaymentMethod})
-      : super(key: key);
+  final Widget Function(PaymentMethod method, bool loading, String error)
+      buildPaymentMethod;
+  final Widget Function(List<Widget> methods) paymentMethodsBuilder;
+  const PaymentMethosDialog({
+    Key key,
+    this.request,
+    this.buildPaymentMethod,
+    this.paymentMethodsBuilder,
+  }) : super(key: key);
   @override
   _PaymentMethosDialogState createState() => _PaymentMethosDialogState();
 }
@@ -17,11 +23,12 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
 
   Future loadMethods() {
     var url = '${widget.request.url}/v2/InitiatePayment';
+
     return http.post(url,
         body: jsonEncode(widget.request.intiatePaymentRequest()),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "bearer ${widget.request.authorizationToken}"
+          "Authorization": "bearer ${widget.request.authorizationToken}",
         }).then((response) {
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
@@ -66,6 +73,15 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
     } else if (errorMessage != null) {
       return buildError();
     } else {
+      List<Widget> childs = methods.map((e) {
+        return _PaymentMethodItem(
+          method: e.withLangauge(widget.request.language),
+          request: widget.request,
+          buildPaymentMethod: widget.buildPaymentMethod,
+        );
+      }).toList();
+      if (widget.paymentMethodsBuilder != null)
+        return widget.paymentMethodsBuilder(childs);
       return ListView(
         shrinkWrap: true,
         children: ListTile.divideTiles(
@@ -82,13 +98,7 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
                 ),
               ),
             ),
-            ...methods.map((e) {
-              return _PaymentMethodItem(
-                method: e.withLangauge(widget.request.language),
-                request: widget.request,
-                buildPaymentMethod: widget.buildPaymentMethod,
-              );
-            }).toList()
+            ...childs,
           ],
         ).toList(),
       );

@@ -2,8 +2,10 @@ library my_fatoorah;
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 part './enums/currency_iso.dart';
@@ -24,7 +26,15 @@ part './ui/payment_view.dart';
 class MyFatoorah {
   static Future<PaymentResponse> startPayment({
     @required BuildContext context,
-    Widget Function(PaymentMethod method) buildPaymentMethod,
+
+    /// user this to customize the single payment method
+    /// thev default is `ListTile`
+    Widget Function(PaymentMethod method, bool loading, String error)
+        buildPaymentMethod,
+
+    /// user this to customize the wrapper of paymentmethods
+    /// thev default is `ListView`
+    Widget Function(List<Widget> methods) methodsBuilder,
     @required MyfatoorahRequest request,
   }) {
     return showDialog(
@@ -33,6 +43,8 @@ class MyFatoorah {
         return Dialog(
           child: PaymentMethosDialog(
             request: request,
+            buildPaymentMethod: buildPaymentMethod,
+            paymentMethodsBuilder: methodsBuilder,
           ),
         );
       },

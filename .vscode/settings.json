@@ -1,4 +1,5 @@
 {
     "git.ignoreLimitWarning": true,
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "dart.flutterSdkPath": "C:\\flutter\\flutter_master"
 }

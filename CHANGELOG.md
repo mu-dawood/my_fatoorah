@@ -1,3 +1,9 @@
+## 2.2.0
+
+- Fix `buildPaymentMethod`
+- Add `paymentMethodsBuilder`
+- Web support
+
 ## 2.1.0
 
 - Remove `finishAfterCallback` property

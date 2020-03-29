@@ -3,7 +3,8 @@ part of my_fatoorah;
 class _PaymentMethodItem extends StatefulWidget {
   final PaymentMethod method;
   final MyfatoorahRequest request;
-  final Widget Function(PaymentMethod method) buildPaymentMethod;
+  final Widget Function(PaymentMethod method, bool loading, String error)
+      buildPaymentMethod;
 
   const _PaymentMethodItem({
     Key key,
@@ -38,20 +39,26 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
           setState(() {
             loading = false;
           });
-          if (ModalRoute.of(context).isCurrent) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => _PaymentView(
-                  url: _response.data.paymentURL,
-                  success: widget.request.successUrl,
-                  error: widget.request.errorUrl,
-                  afterPaymentBehaviour: widget.request.afterPaymentBehaviour,
-                ),
-              ),
-            ).then((value) {
-              if (value != null) Navigator.of(context).pop(value);
+          if (kIsWeb) {
+            launch(url).then((value) {
+              print(".....");
             });
+          } else {
+            if (ModalRoute.of(context).isCurrent) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => _PaymentView(
+                    url: _response.data.paymentURL,
+                    success: widget.request.successUrl,
+                    error: widget.request.errorUrl,
+                    afterPaymentBehaviour: widget.request.afterPaymentBehaviour,
+                  ),
+                ),
+              ).then((value) {
+                if (value != null) Navigator.of(context).pop(value);
+              });
+            }
           }
         } else {
           showError(_response.message);
@@ -76,6 +83,12 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.buildPaymentMethod != null) {
+      return InkWell(
+        onTap: onPressed,
+        child: widget.buildPaymentMethod(widget.method, loading, error),
+      );
+    }
     return AnimatedSize(
       vsync: this,
       duration: Duration(milliseconds: 300),
@@ -103,12 +116,6 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
   }
 
   Widget buildItem() {
-    if (widget.buildPaymentMethod != null) {
-      return InkWell(
-        onTap: onPressed,
-        child: widget.buildPaymentMethod(widget.method),
-      );
-    }
     return ListTile(
       onTap: onPressed,
       title: Text(widget.method.paymentMethod),
