@@ -20,10 +20,13 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
   List<PaymentMethod> methods = [];
   bool loading = true;
   String errorMessage;
+  String url;
+  FlutterWebviewPlugin flutterWebviewPlugin;
+  bool webViewClosed = false;
 
   Future loadMethods() {
-    var url = '${widget.request.url}/v2/InitiatePayment';
-
+    var url = widget.request.initiatePaymentUrl ??
+        '${widget.request.url}/v2/InitiatePayment';
     return http.post(url,
         body: jsonEncode(widget.request.intiatePaymentRequest()),
         headers: {
@@ -45,6 +48,7 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
         });
       }
     }).catchError((e) {
+      print(e);
       setState(() {
         loading = false;
         errorMessage = e.toString();
@@ -52,18 +56,101 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
     });
   }
 
+  PaymentResponse getResponse() {
+    if (url == null) return PaymentResponse(PaymentStatus.None);
+    Uri uri = Uri.parse(url);
+    var isSuccess = url.contains(widget.request.successUrl);
+    var isError = url.contains(widget.request.errorUrl);
+    if (!isError && !isSuccess) return PaymentResponse(PaymentStatus.None);
+    PaymentStatus status =
+        isSuccess ? PaymentStatus.Success : PaymentStatus.Error;
+
+    return PaymentResponse(status, uri.queryParameters["paymentId"]);
+  }
+
   @override
   void initState() {
     loadMethods();
+    flutterWebviewPlugin = new FlutterWebviewPlugin();
+    flutterWebviewPlugin.onDestroy.listen((event) {
+      webViewClosed = true;
+    });
+
+    flutterWebviewPlugin.onStateChanged.listen((state) {
+      url = state.url;
+      print("\u001b[31m${state.type}");
+      if (state.type == WebViewState.shouldStart) {
+        if (widget.request.afterPaymentBehaviour ==
+            AfterPaymentBehaviour.BeforeCalbacksExecution) {
+          var response = getResponse();
+          if (response.status != PaymentStatus.None) {
+            Navigator.of(context).pop(response);
+            flutterWebviewPlugin.close();
+            return;
+          }
+        }
+        if (!loading) {
+          loading = false;
+          flutterWebviewPlugin.hide();
+        }
+      } else if (state.type == WebViewState.finishLoad) {
+        if (widget.request.afterPaymentBehaviour ==
+            AfterPaymentBehaviour.AfterCalbacksExecution) {
+          var response = getResponse();
+          if (response.status != PaymentStatus.None) {
+            Navigator.of(context).pop(response);
+            flutterWebviewPlugin.close();
+            return;
+          }
+        }
+        loading = false;
+        flutterWebviewPlugin.show();
+      } else if (state.type == WebViewState.startLoad && !loading) {
+        loading = false;
+        flutterWebviewPlugin.hide();
+      }
+    });
     super.initState();
   }
 
   @override
+  dispose() {
+    flutterWebviewPlugin.close();
+    flutterWebviewPlugin.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return AnimatedSize(
-      vsync: this,
-      duration: Duration(milliseconds: 300),
-      child: buildChild(),
+    return WillPopScope(
+      onWillPop: () async {
+        var response = getResponse();
+        if (response.status != PaymentStatus.None) {
+          Navigator.of(context).pop(response);
+          if (webViewClosed == false) {
+            flutterWebviewPlugin.close();
+          }
+        } else if (webViewClosed == false) {
+          flutterWebviewPlugin.canGoBack().then((value) {
+            if (value)
+              flutterWebviewPlugin.goBack();
+            else {
+              flutterWebviewPlugin.close();
+              setState(() {
+                loading = false;
+              });
+            }
+          });
+        } else
+          Navigator.of(context).pop(response);
+
+        return false;
+      },
+      child: AnimatedSize(
+        vsync: this,
+        duration: Duration(milliseconds: 300),
+        child: buildChild(),
+      ),
     );
   }
 
@@ -78,6 +165,20 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
           method: e.withLangauge(widget.request.language),
           request: widget.request,
           buildPaymentMethod: widget.buildPaymentMethod,
+          onLaunch: (String _url) {
+            setState(() {
+              webViewClosed = false;
+              loading = true;
+            });
+            flutterWebviewPlugin.launch(
+              _url,
+              withJavascript: true,
+              useWideViewPort: true,
+              withZoom: true,
+              hidden: true,
+              ignoreSSLErrors: true,
+            );
+          },
         );
       }).toList();
       if (widget.paymentMethodsBuilder != null)

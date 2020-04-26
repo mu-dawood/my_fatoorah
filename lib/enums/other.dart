@@ -6,4 +6,4 @@ enum AfterPaymentBehaviour {
   None,
 }
 
-enum PaymentStatus { Success, Error }
+enum PaymentStatus { Success, Error, None }

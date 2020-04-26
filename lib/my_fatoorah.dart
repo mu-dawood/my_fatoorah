@@ -5,8 +5,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+
 
 part './enums/currency_iso.dart';
 part './enums/language.dart';
@@ -21,7 +22,6 @@ part './response/payment_method.dart';
 part './response/payment_response.dart';
 part './ui/payment_method.dart';
 part './ui/payment_methods_dialog.dart';
-part './ui/payment_view.dart';
 
 class MyFatoorah {
   static Future<PaymentResponse> startPayment({

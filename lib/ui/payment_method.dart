@@ -3,6 +3,7 @@ part of my_fatoorah;
 class _PaymentMethodItem extends StatefulWidget {
   final PaymentMethod method;
   final MyfatoorahRequest request;
+  final Function(String url) onLaunch;
   final Widget Function(PaymentMethod method, bool loading, String error)
       buildPaymentMethod;
 
@@ -11,6 +12,7 @@ class _PaymentMethodItem extends StatefulWidget {
     @required this.method,
     this.buildPaymentMethod,
     @required this.request,
+    @required this.onLaunch,
   }) : super(key: key);
   @override
   __PaymentMethodItemState createState() => __PaymentMethodItemState();
@@ -20,11 +22,10 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
     with TickerProviderStateMixin {
   bool loading = false;
   String error;
-  Future onPressed() {
-    setState(() {
-      loading = true;
-    });
-    var url = '${widget.request.url}/v2/ExecutePayment';
+
+  Future<_ExcutePaymentResponse> loadExcustion() {
+    var url = widget.request.executePaymentUrl ??
+        '${widget.request.url}/v2/ExecutePayment';
     return http.post(url,
         body: jsonEncode(
             widget.request.excutePaymentRequest(widget.method.paymentMethodId)),
@@ -36,36 +37,25 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
         var json = jsonDecode(response.body);
         var _response = _ExcutePaymentResponse.fromJson(json);
         if (_response.isSuccess) {
-          setState(() {
-            loading = false;
-          });
-          if (kIsWeb) {
-            launch(url).then((value) {
-              print(".....");
-            });
-          } else {
-            if (ModalRoute.of(context).isCurrent) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => _PaymentView(
-                    url: _response.data.paymentURL,
-                    success: widget.request.successUrl,
-                    error: widget.request.errorUrl,
-                    afterPaymentBehaviour: widget.request.afterPaymentBehaviour,
-                  ),
-                ),
-              ).then((value) {
-                if (value != null) Navigator.of(context).pop(value);
-              });
-            }
-          }
+          return _response;
         } else {
-          showError(_response.message);
+          throw Exception(_response.message);
         }
       } else {
-        showError(response.body);
+        throw Exception(response.body);
       }
+    });
+  }
+
+  Future onPressed() {
+    setState(() {
+      loading = true;
+    });
+    return loadExcustion().then((response) {
+      setState(() {
+        loading = false;
+      });
+      widget.onLaunch(response.data.paymentURL);
     }).catchError(showError);
   }
 

@@ -4,7 +4,7 @@ class PaymentResponse {
   final PaymentStatus status;
   final String paymentId;
 
-  PaymentResponse(this.status, this.paymentId);
+  PaymentResponse(this.status, [this.paymentId]);
   @override
   String toString() {
     return "Status: $status     PaymentId: $paymentId";

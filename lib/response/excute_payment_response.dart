@@ -18,10 +18,14 @@ class _ExcutePaymentResponseData {
   String userDefinedField;
 
   _ExcutePaymentResponseData.fromJson(Map<String, dynamic> json) {
-    invoiceId = int.tryParse(json['InvoiceId']?.toString() ?? "");
-    isDirectPayment = json['IsDirectPayment'] == true;
-    paymentURL = json['PaymentURL'] ?? "";
-    customerReference = json['CustomerReference'] ?? "";
-    userDefinedField = json['UserDefinedField'] ?? "";
+    invoiceId = int.tryParse(
+        (json['InvoiceId'] ?? json['invoiceId'])?.toString() ?? "");
+    isDirectPayment =
+        json['IsDirectPayment'] == true || json['isDirectPayment'] == true;
+    paymentURL = json['PaymentURL'] ?? json['paymentURL'] ?? "";
+    customerReference =
+        json['CustomerReference'] ?? json['customerReference'] ?? "";
+    userDefinedField =
+        json['UserDefinedField'] ?? json['userDefinedField'] ?? "";
   }
 }

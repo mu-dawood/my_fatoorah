@@ -16,16 +16,23 @@ class PaymentMethod {
   ApiLanguage language;
 
   PaymentMethod.fromJson(Map<String, dynamic> json) {
-    paymentMethodId = int.tryParse(json['PaymentMethodId']?.toString() ?? "");
-    _paymentMethodAr = json['PaymentMethodAr'] ?? "";
-    _paymentMethodEn = json['PaymentMethodEn'] ?? "";
-    paymentMethodCode = json['PaymentMethodCode'] ?? "";
-    isDirectPayment = json['IsDirectPayment'] == true;
-    serviceCharge =
-        double.tryParse(json['ServiceCharge']?.toString() ?? "0") ?? 0;
-    _totalAmount = double.tryParse(json['TotalAmount']?.toString() ?? "0") ?? 0;
-    currencyIso = json['CurrencyIso'] ?? "";
-    imageUrl = json['ImageUrl'] ?? "";
+    paymentMethodId = int.tryParse(
+        (json['PaymentMethodId'] ?? json['paymentMethodId'])?.toString() ?? "");
+    _paymentMethodAr = json['PaymentMethodAr'] ?? json['paymentMethodAr'] ?? "";
+    _paymentMethodEn = json['PaymentMethodEn'] ?? json['paymentMethodEn'] ?? "";
+    paymentMethodCode =
+        json['PaymentMethodCode'] ?? json['paymentMethodCode'] ?? "";
+    isDirectPayment =
+        json['IsDirectPayment'] == true || json['isDirectPayment'] == true;
+    serviceCharge = double.tryParse(
+            (json['ServiceCharge'] ?? json['serviceCharge'])?.toString() ??
+                "0") ??
+        0;
+    _totalAmount = double.tryParse(
+            (json['TotalAmount'] ?? json['totalAmount'])?.toString() ?? "0") ??
+        0;
+    currencyIso = json['CurrencyIso'] ?? json['currencyIso'] ?? "";
+    imageUrl = json['ImageUrl'] ?? json['imageUrl'] ?? "";
   }
   PaymentMethod withLangauge(ApiLanguage language) {
     return this..language = language;

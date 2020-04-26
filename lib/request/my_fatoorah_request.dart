@@ -27,6 +27,20 @@ class MyfatoorahRequest {
       ? "https://api.myfatoorah.com"
       : "https://apitest.myfatoorah.com";
 
+  /// url to use instead of my fatoorah url
+  /// Must not be null if you run on the web
+  /// if you set initiatePaymentUrl or executePayment you can set token equal to null
+  /// and make these urls set the token from backend for security reasons
+  /// This url must return the base response of my fatoorah without any edits
+  final String initiatePaymentUrl;
+
+  /// url to use instead of my fatoorah url
+  /// Must not be null if you run on the web
+  /// if you set initiatePaymentUrl or executePayment you can set token equal to null
+  /// and make these urls set the token from backend for security reasons
+  /// This url must return the base response of my fatoorah without any edits
+  final String executePaymentUrl;
+
   /// this will controles what happen after payment done
   ///
   /// `AfterPaymentBehaviour.None` the default value , nothing will happen
@@ -38,6 +52,9 @@ class MyfatoorahRequest {
 
   final _testToken =
       "7Fs7eBv21F5xAocdPvvJ-sCqEyNHq4cygJrQUFvFiWEexBUPs4AkeLQxH4pzsUrY3Rays7GVA6SojFCz2DMLXSJVqk8NG-plK-cZJetwWjgwLPub_9tQQohWLgJ0q2invJ5C5Imt2ket_-JAlBYLLcnqp_WmOfZkBEWuURsBVirpNQecvpedgeCx4VaFae4qWDI_uKRV1829KCBEH84u6LYUxh8W_BYqkzXJYt99OlHTXHegd91PLT-tawBwuIly46nwbAs5Nt7HFOozxkyPp8BW9URlQW1fE4R_40BXzEuVkzK3WAOdpR92IkV94K_rDZCPltGSvWXtqJbnCpUB6iUIn1V-Ki15FAwh_nsfSmt_NQZ3rQuvyQ9B3yLCQ1ZO_MGSYDYVO26dyXbElspKxQwuNRot9hi3FIbXylV3iN40-nCPH4YQzKjo5p_fuaKhvRh7H8oFjRXtPtLQQUIDxk-jMbOp7gXIsdz02DrCfQIihT4evZuWA6YShl6g8fnAqCy8qRBf_eLDnA9w-nBh4Bq53b1kdhnExz0CMyUjQ43UO3uhMkBomJTXbmfAAHP8dZZao6W8a34OktNQmPTbOHXrtxf6DS-oKOu3l79uX_ihbL8ELT40VjIW3MJeZ_-auCPOjpE3Ax4dzUkSDLCljitmzMagH2X8jN8-AYLl46KcfkBV";
+
+  /// title for payment screen or popup window in web
+  final String title;
 
   /// authorization token without bearer
   /// ### Leave it null to use test value
@@ -125,7 +142,10 @@ class MyfatoorahRequest {
     @required this.errorUrl,
     @required this.currencyIso,
     this.mobileCountryCode,
+    this.initiatePaymentUrl,
+    this.executePaymentUrl,
     this.customerMobile,
+    this.title = "My fatoorah",
     this.customerName,
     this.customerEmail,
     this.customerReference,
