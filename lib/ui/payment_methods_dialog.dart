@@ -22,7 +22,7 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
   String errorMessage;
   String url;
   FlutterWebviewPlugin flutterWebviewPlugin;
-  bool webViewClosed = false;
+  bool webViewClosed;
 
   Future loadMethods() {
     var url = widget.request.initiatePaymentUrl ??
