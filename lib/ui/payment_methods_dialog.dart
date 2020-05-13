@@ -146,10 +146,12 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
 
         return false;
       },
-      child: AnimatedSize(
-        vsync: this,
-        duration: Duration(milliseconds: 300),
-        child: buildChild(),
+      child: SingleChildScrollView(
+        child: AnimatedSize(
+          vsync: this,
+          duration: Duration(milliseconds: 300),
+          child: buildChild(),
+        ),
       ),
     );
   }
