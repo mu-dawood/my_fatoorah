@@ -2,7 +2,7 @@
 
 - Fix `buildPaymentMethod`
 - Add `paymentMethodsBuilder`
-- Web support
+
 
 ## 2.1.0
 
