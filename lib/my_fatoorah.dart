@@ -22,6 +22,7 @@ part './response/payment_method.dart';
 part './response/payment_response.dart';
 part './ui/payment_method.dart';
 part './ui/payment_methods_dialog.dart';
+part './ui/web_view_page.dart';
 
 class MyFatoorah {
   static Future<PaymentResponse> startPayment({

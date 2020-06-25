@@ -1,3 +1,7 @@
+## 2.3.0
+
+- Use webview in page to allow back in ios
+
 ## 2.2.0
 
 - Fix `buildPaymentMethod`

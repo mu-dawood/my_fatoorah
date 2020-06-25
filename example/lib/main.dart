@@ -43,10 +43,6 @@ class InnerPage extends StatelessWidget {
                   context: context,
                   request: MyfatoorahRequest(
                     currencyIso: Country.SaudiArabia,
-                    initiatePaymentUrl:
-                        "http://herajdates-001-site23.htempurl.com/api/Payment/InitiatePayment",
-                    executePaymentUrl:
-                        "http://herajdates-001-site23.htempurl.com/api/Payment/ExecutePayment",
                     successUrl:
                         "https://assets.materialup.com/uploads/473ef52c-8b96-46f7-9771-cac4b112ae28/preview.png",
                     errorUrl:

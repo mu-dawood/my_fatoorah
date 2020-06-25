@@ -21,8 +21,7 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
   bool loading = true;
   String errorMessage;
   String url;
-  FlutterWebviewPlugin flutterWebviewPlugin;
-  bool webViewClosed;
+  FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
 
   Future loadMethods() {
     var url = widget.request.initiatePaymentUrl ??
@@ -71,10 +70,6 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
   @override
   void initState() {
     loadMethods();
-    flutterWebviewPlugin = new FlutterWebviewPlugin();
-    flutterWebviewPlugin.onDestroy.listen((event) {
-      webViewClosed = true;
-    });
 
     flutterWebviewPlugin.onStateChanged.listen((state) {
       url = state.url;
@@ -84,30 +79,19 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
             AfterPaymentBehaviour.BeforeCalbacksExecution) {
           var response = getResponse();
           if (response.status != PaymentStatus.None) {
-            Navigator.of(context).pop(response);
-            flutterWebviewPlugin.close();
+            Navigator.of(context).pop();
             return;
           }
-        }
-        if (!loading) {
-          loading = false;
-          flutterWebviewPlugin.hide();
         }
       } else if (state.type == WebViewState.finishLoad) {
         if (widget.request.afterPaymentBehaviour ==
             AfterPaymentBehaviour.AfterCalbacksExecution) {
           var response = getResponse();
           if (response.status != PaymentStatus.None) {
-            Navigator.of(context).pop(response);
-            flutterWebviewPlugin.close();
+            Navigator.of(context).pop();
             return;
           }
         }
-        loading = false;
-        flutterWebviewPlugin.show();
-      } else if (state.type == WebViewState.startLoad && !loading) {
-        loading = false;
-        flutterWebviewPlugin.hide();
       }
     });
     super.initState();
@@ -125,33 +109,15 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
     return WillPopScope(
       onWillPop: () async {
         var response = getResponse();
-        if (response.status != PaymentStatus.None) {
-          Navigator.of(context).pop(response);
-          if (webViewClosed == false) {
-            flutterWebviewPlugin.close();
-          }
-        } else if (webViewClosed == false) {
-          flutterWebviewPlugin.canGoBack().then((value) {
-            if (value)
-              flutterWebviewPlugin.goBack();
-            else {
-              flutterWebviewPlugin.close();
-              setState(() {
-                loading = false;
-              });
-            }
-          });
-        } else
-          Navigator.of(context).pop(response);
+
+        Navigator.of(context).pop(response);
 
         return false;
       },
-      child: SingleChildScrollView(
-        child: AnimatedSize(
-          vsync: this,
-          duration: Duration(milliseconds: 300),
-          child: buildChild(),
-        ),
+      child: AnimatedSize(
+        vsync: this,
+        duration: Duration(milliseconds: 300),
+        child: buildChild(),
       ),
     );
   }
@@ -168,18 +134,17 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
           request: widget.request,
           buildPaymentMethod: widget.buildPaymentMethod,
           onLaunch: (String _url) {
-            setState(() {
-              webViewClosed = false;
-              loading = true;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => _WebViewPage(url: _url),
+              ),
+            ).then((value) {
+              var response = getResponse();
+              if (response.status != null &&
+                  response.status != PaymentStatus.None)
+                Navigator.of(context).pop(response);
             });
-            flutterWebviewPlugin.launch(
-              _url,
-              withJavascript: true,
-              useWideViewPort: true,
-              withZoom: true,
-              hidden: true,
-              ignoreSSLErrors: true,
-            );
           },
         );
       }).toList();
