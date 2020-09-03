@@ -2,12 +2,9 @@ library my_fatoorah;
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-
+import 'package:http/http.dart' as http;
 
 part './enums/currency_iso.dart';
 part './enums/language.dart';
@@ -24,7 +21,7 @@ part './ui/payment_method.dart';
 part './ui/payment_methods_dialog.dart';
 part './ui/web_view_page.dart';
 
-class MyFatoorah {
+class MyFatoorah extends StatelessWidget {
   static Future<PaymentResponse> startPayment({
     @required BuildContext context,
 
@@ -42,7 +39,7 @@ class MyFatoorah {
       context: context,
       builder: (ctx) {
         return Dialog(
-          child: PaymentMethosDialog(
+          child: _PaymentMethodsBuilder(
             request: request,
             buildPaymentMethod: buildPaymentMethod,
             paymentMethodsBuilder: methodsBuilder,
@@ -55,5 +52,32 @@ class MyFatoorah {
       else
         throw Exception("The payment is not completed");
     });
+  }
+
+  final Widget Function(PaymentMethod method, bool loading, String error)
+      buildPaymentMethod;
+
+  /// user this to customize the wrapper of paymentmethods
+  /// thev default is `ListView`
+  final Widget Function(List<Widget> methods) methodsBuilder;
+
+  final MyfatoorahRequest request;
+  final Function(PaymentResponse res) onResult;
+  const MyFatoorah({
+    Key key,
+    this.buildPaymentMethod,
+    this.methodsBuilder,
+    @required this.request,
+    @required this.onResult,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return _PaymentMethodsBuilder(
+      request: request,
+      onResult: onResult,
+      buildPaymentMethod: buildPaymentMethod,
+      paymentMethodsBuilder: methodsBuilder,
+    );
   }
 }

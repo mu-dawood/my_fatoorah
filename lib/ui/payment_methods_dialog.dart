@@ -1,21 +1,23 @@
 part of my_fatoorah;
 
-class PaymentMethosDialog extends StatefulWidget {
+class _PaymentMethodsBuilder extends StatefulWidget {
   final MyfatoorahRequest request;
+  final Function(PaymentResponse res) onResult;
   final Widget Function(PaymentMethod method, bool loading, String error)
       buildPaymentMethod;
   final Widget Function(List<Widget> methods) paymentMethodsBuilder;
-  const PaymentMethosDialog({
+  const _PaymentMethodsBuilder({
     Key key,
     this.request,
     this.buildPaymentMethod,
     this.paymentMethodsBuilder,
+    this.onResult,
   }) : super(key: key);
   @override
-  _PaymentMethosDialogState createState() => _PaymentMethosDialogState();
+  _PaymentMethodsBuilderState createState() => _PaymentMethodsBuilderState();
 }
 
-class _PaymentMethosDialogState extends State<PaymentMethosDialog>
+class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
     with TickerProviderStateMixin {
   List<PaymentMethod> methods = [];
   bool loading = true;
@@ -73,7 +75,6 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
 
     flutterWebviewPlugin.onStateChanged.listen((state) {
       url = state.url;
-      print("\u001b[31m${state.type}");
       if (state.type == WebViewState.shouldStart) {
         if (widget.request.afterPaymentBehaviour ==
             AfterPaymentBehaviour.BeforeCalbacksExecution) {
@@ -108,8 +109,8 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        if (widget.onResult != null) return true;
         var response = getResponse();
-
         Navigator.of(context).pop(response);
 
         return false;
@@ -142,8 +143,12 @@ class _PaymentMethosDialogState extends State<PaymentMethosDialog>
             ).then((value) {
               var response = getResponse();
               if (response.status != null &&
-                  response.status != PaymentStatus.None)
-                Navigator.of(context).pop(response);
+                  response.status != PaymentStatus.None) {
+                if (widget.onResult != null)
+                  widget.onResult(response);
+                else
+                  Navigator.of(context).pop(response);
+              }
             });
           },
         );

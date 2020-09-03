@@ -1,3 +1,8 @@
+## 2.4.0
+
+- Change test api token to latest version
+- Add inline widget to use instead of dialog (dialog is still working)
+
 ## 2.3.0
 
 - Use webview in page to allow back in ios

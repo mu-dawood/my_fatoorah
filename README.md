@@ -69,6 +69,27 @@ import 'package:my_fatoorah/my_fatoorah.dart';
 
 See the example for more details
 ```
+## Another usage way
+```dart
+import 'package:my_fatoorah/my_fatoorah.dart';
+...
+ MyFatoorah(
+        onResult:(response){
+            print(res.status);
+        }
+        request: MyfatoorahRequest(
+                      currencyIso: Country.SaudiArabia,
+                      successUrl:
+                          "Your success call back",
+                      errorUrl:
+                          "Your error call back",
+                      invoiceAmount: 100,
+                      language: ApiLanguage.Arabic,
+                      token: null,
+                      afterPaymentBehaviour:AfterPaymentBehaviour.None, //See the describe for this property for more details
+                      ),
+ );
+```
 
 ### Notes
 
