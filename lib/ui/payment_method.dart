@@ -109,7 +109,7 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
     return ListTile(
       onTap: onPressed,
       title: Text(widget.method.paymentMethod),
-      subtitle: Text("+ ${widget.method.serviceCharge.toStringAsFixed(2)}"),
+      //subtitle: Text("+ ${widget.method.serviceCharge.toStringAsFixed(2)}"),
       trailing: Text(
         widget.method.totalAmount.toStringAsFixed(2),
         style: TextStyle(fontSize: 18),
