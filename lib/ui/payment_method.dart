@@ -111,7 +111,7 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
       title: Text(widget.method.paymentMethod),
       //subtitle: Text("+ ${widget.method.serviceCharge.toStringAsFixed(2)}"),
       trailing: Text(
-        widget.method.totalAmount.toStringAsFixed(2),
+        widget.method._totalAmount.toStringAsFixed(2), //show only total amount
         style: TextStyle(fontSize: 18),
       ),
       leading: Image.network(widget.method.imageUrl, width: 50),
