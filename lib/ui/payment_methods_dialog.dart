@@ -28,6 +28,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
   Future loadMethods() {
     var url = widget.request.initiatePaymentUrl ??
         '${widget.request.url}/v2/InitiatePayment';
+
     return http.post(url,
         body: jsonEncode(widget.request.intiatePaymentRequest()),
         headers: {
@@ -75,6 +76,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
 
     flutterWebviewPlugin.onStateChanged.listen((state) {
       url = state.url;
+      print("${state.type} => $url");
       if (state.type == WebViewState.shouldStart) {
         if (widget.request.afterPaymentBehaviour ==
             AfterPaymentBehaviour.BeforeCalbacksExecution) {
