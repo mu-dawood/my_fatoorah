@@ -108,13 +108,13 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
   Widget buildItem() {
     return ListTile(
       onTap: onPressed,
-      title: Text("jhghjhghjhgj"),//Text(widget.method.paymentMethod),
+      title: Text(widget.method.paymentMethod),
       //subtitle: Text("+ ${widget.method.serviceCharge.toStringAsFixed(2)}"),
       // trailing: Text(
       //   widget.method._totalAmount.toStringAsFixed(2), //show only total amount
       //   style: TextStyle(fontSize: 18),
       // ),
-      //leading: Image.network(widget.method.imageUrl, width: 50),
+      leading: Image.network(widget.method.imageUrl, width: 50),
     );
   }
 }
