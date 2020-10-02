@@ -3,15 +3,17 @@ part of my_fatoorah;
 class _PaymentMethodsBuilder extends StatefulWidget {
   final MyfatoorahRequest request;
   final Function(PaymentResponse res) onResult;
+  final bool showServiceCharge;
   final Widget Function(PaymentMethod method, bool loading, String error)
       buildPaymentMethod;
   final Widget Function(List<Widget> methods) paymentMethodsBuilder;
   const _PaymentMethodsBuilder({
     Key key,
-    this.request,
-    this.buildPaymentMethod,
-    this.paymentMethodsBuilder,
+    @required this.request,
+    @required this.buildPaymentMethod,
+    @required this.paymentMethodsBuilder,
     this.onResult,
+    @required this.showServiceCharge,
   }) : super(key: key);
   @override
   _PaymentMethodsBuilderState createState() => _PaymentMethodsBuilderState();
@@ -133,6 +135,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
     } else {
       List<Widget> childs = methods.map((e) {
         return _PaymentMethodItem(
+          showServiceCharge: widget.showServiceCharge,
           method: e.withLangauge(widget.request.language),
           request: widget.request,
           buildPaymentMethod: widget.buildPaymentMethod,

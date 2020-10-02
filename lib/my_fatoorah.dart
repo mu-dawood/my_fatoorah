@@ -24,6 +24,8 @@ part './ui/web_view_page.dart';
 class MyFatoorah extends StatelessWidget {
   static Future<PaymentResponse> startPayment({
     @required BuildContext context,
+    //If this is true service charge will be shown in subtitle defaults to false
+    bool showServiceCharge = false,
 
     /// user this to customize the single payment method
     /// thev default is `ListTile`
@@ -42,6 +44,7 @@ class MyFatoorah extends StatelessWidget {
           child: _PaymentMethodsBuilder(
             request: request,
             buildPaymentMethod: buildPaymentMethod,
+            showServiceCharge: showServiceCharge,
             paymentMethodsBuilder: methodsBuilder,
           ),
         );
@@ -63,12 +66,15 @@ class MyFatoorah extends StatelessWidget {
 
   final MyfatoorahRequest request;
   final Function(PaymentResponse res) onResult;
+  //If this is true service charge will be shown in subtitle
+  final bool showServiceCharge;
   const MyFatoorah({
     Key key,
     this.buildPaymentMethod,
     this.methodsBuilder,
     @required this.request,
     @required this.onResult,
+    this.showServiceCharge = false,
   }) : super(key: key);
 
   @override
@@ -76,6 +82,7 @@ class MyFatoorah extends StatelessWidget {
     return _PaymentMethodsBuilder(
       request: request,
       onResult: onResult,
+      showServiceCharge: showServiceCharge,
       buildPaymentMethod: buildPaymentMethod,
       paymentMethodsBuilder: methodsBuilder,
     );
