@@ -10,7 +10,7 @@ class PaymentMethod {
   bool isDirectPayment;
   double serviceCharge;
   double _totalAmount;
-  double get totalAmount => _totalAmount + serviceCharge;
+  double get totalAmount => _totalAmount; //client requires to not to show charges //+ serviceCharge;
   String currencyIso;
   String imageUrl;
   ApiLanguage language;
