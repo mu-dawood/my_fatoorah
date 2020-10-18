@@ -2,9 +2,10 @@
 
 My Fatoorah Payment
 # Screenshots
-![Simulator Screen Shot - iPhone 11 Pro - 2020-10-19 at 01 45 05](https://user-images.githubusercontent.com/31937782/96389030-5780b800-11ad-11eb-9f0f-3bedc05466bf.png)
-[Simulator Screen Shot - iPhone 11 Pro - 2020-10-19 at 01 46 33](https://user-images.githubusercontent.com/31937782/96389044-68312e00-11ad-11eb-900d-9b2eea73e087.png)
-![Simulator Screen Shot - iPhone 11 Pro - 2020-10-19 at 01 46 58](https://user-images.githubusercontent.com/31937782/96389054-754e1d00-11ad-11eb-98dd-3d4e791dc64d.png)
+![](https://github.com/mo-ah-dawood/my_fatoorah/blob/master/screen_1.md)
+![](https://github.com/mo-ah-dawood/my_fatoorah/blob/master/screen_2.md)
+![](https://github.com/mo-ah-dawood/my_fatoorah/blob/master/screen_3.md)
+
 
 ## Getting Started
 
