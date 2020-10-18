@@ -113,8 +113,11 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (widget.onResult != null) return true;
         var response = getResponse();
+        if (widget.onResult != null) {
+          widget.onResult(response);
+          return true;
+        }
         Navigator.of(context).pop(response);
 
         return false;

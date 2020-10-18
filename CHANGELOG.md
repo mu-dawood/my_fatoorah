@@ -1,3 +1,7 @@
+## 2.5.1
+
+* Fix on result when back
+
 ## 2.5.0
 
 * Add the ability to show or hide service charges
