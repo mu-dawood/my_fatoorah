@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+      debugShowCheckedModeBanner: false,
       locale: Locale("ar"),
       supportedLocales: [
         const Locale('ar'),
