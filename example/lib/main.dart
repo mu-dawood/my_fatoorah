@@ -28,19 +28,26 @@ class InnerPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("دفع ماى فاتورة"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text("قيمة الطلب هى 100 ريال سعودى"),
-            SizedBox(height: 20),
-            RaisedButton(
+        actions: [
+          IconButton(
+              icon: Icon(Icons.payment),
               onPressed: () {
                 MyFatoorah.startPayment(
                   context: context,
+                  errorChild: Center(
+                    child: Icon(
+                      Icons.error,
+                      color: Colors.redAccent,
+                      size: 50,
+                    ),
+                  ),
+                  succcessChild: Center(
+                    child: Icon(
+                      Icons.done_all,
+                      color: Colors.greenAccent,
+                      size: 50,
+                    ),
+                  ),
                   request: MyfatoorahRequest(
                     currencyIso: Country.SaudiArabia,
                     successUrl:
@@ -50,19 +57,49 @@ class InnerPage extends StatelessWidget {
                     invoiceAmount: 100,
                     language: ApiLanguage.Arabic,
                     token: null,
-                    afterPaymentBehaviour:
-                        AfterPaymentBehaviour.BeforeCalbacksExecution,
                   ),
                 ).then((response) {
                   print(response);
                 }).catchError((e) {
                   print(e);
                 });
-              },
-              child: Text("دفع"),
-            )
-          ],
-        ),
+              })
+        ],
+      ),
+      body: Builder(
+        builder: (BuildContext context) {
+          return MyFatoorah(
+            request: MyfatoorahRequest(
+              currencyIso: Country.SaudiArabia,
+              successUrl:
+                  "https://assets.materialup.com/uploads/473ef52c-8b96-46f7-9771-cac4b112ae28/preview.png",
+              errorUrl:
+                  "https://www.digitalpaymentguru.com/wp-content/uploads/2019/08/Transaction-Failed.png",
+              invoiceAmount: 100,
+              language: ApiLanguage.Arabic,
+              token: null,
+            ),
+            errorChild: Center(
+              child: Icon(
+                Icons.error,
+                color: Colors.redAccent,
+                size: 50,
+              ),
+            ),
+            succcessChild: Center(
+              child: Icon(
+                Icons.done_all,
+                color: Colors.greenAccent,
+                size: 50,
+              ),
+            ),
+            onResult: (PaymentResponse res) {
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text(res.status.toString()),
+              ));
+            },
+          );
+        },
       ),
     );
   }

@@ -7,6 +7,9 @@ class _PaymentMethodsBuilder extends StatefulWidget {
   final Widget Function(PaymentMethod method, bool loading, String error)
       buildPaymentMethod;
   final Widget Function(List<Widget> methods) paymentMethodsBuilder;
+  final Widget errorChild;
+  final Widget succcessChild;
+  final AfterPaymentBehaviour afterPaymentBehaviour;
   const _PaymentMethodsBuilder({
     Key key,
     @required this.request,
@@ -14,6 +17,9 @@ class _PaymentMethodsBuilder extends StatefulWidget {
     @required this.paymentMethodsBuilder,
     this.onResult,
     @required this.showServiceCharge,
+    @required this.errorChild,
+    @required this.succcessChild,
+    @required this.afterPaymentBehaviour,
   }) : super(key: key);
   @override
   _PaymentMethodsBuilderState createState() => _PaymentMethodsBuilderState();
@@ -25,7 +31,6 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
   bool loading = true;
   String errorMessage;
   String url;
-  FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
 
   Future loadMethods() {
     var url = widget.request.initiatePaymentUrl ??
@@ -60,52 +65,15 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
     });
   }
 
-  PaymentResponse getResponse() {
-    if (url == null) return PaymentResponse(PaymentStatus.None);
-    Uri uri = Uri.parse(url);
-    var isSuccess = url.contains(widget.request.successUrl);
-    var isError = url.contains(widget.request.errorUrl);
-    if (!isError && !isSuccess) return PaymentResponse(PaymentStatus.None);
-    PaymentStatus status =
-        isSuccess ? PaymentStatus.Success : PaymentStatus.Error;
-
-    return PaymentResponse(status, uri.queryParameters["paymentId"]);
-  }
-
   @override
   void initState() {
     loadMethods();
 
-    flutterWebviewPlugin.onStateChanged.listen((state) {
-      url = state.url;
-      print("${state.type} => $url");
-      if (state.type == WebViewState.shouldStart) {
-        if (widget.request.afterPaymentBehaviour ==
-            AfterPaymentBehaviour.BeforeCalbacksExecution) {
-          var response = getResponse();
-          if (response.status != PaymentStatus.None) {
-            Navigator.of(context).pop();
-            return;
-          }
-        }
-      } else if (state.type == WebViewState.finishLoad) {
-        if (widget.request.afterPaymentBehaviour ==
-            AfterPaymentBehaviour.AfterCalbacksExecution) {
-          var response = getResponse();
-          if (response.status != PaymentStatus.None) {
-            Navigator.of(context).pop();
-            return;
-          }
-        }
-      }
-    });
     super.initState();
   }
 
   @override
   dispose() {
-    flutterWebviewPlugin.close();
-    flutterWebviewPlugin.dispose();
     super.dispose();
   }
 
@@ -113,12 +81,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        var response = getResponse();
-        if (widget.onResult != null) {
-          widget.onResult(response);
-          return true;
-        }
-        Navigator.of(context).pop(response);
+        Navigator.of(context).pop(PaymentResponse(PaymentStatus.None));
 
         return false;
       },
@@ -146,16 +109,23 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => _WebViewPage(url: _url),
+                builder: (context) => _WebViewPage(
+                  url: _url,
+                  errorChild: widget.errorChild,
+                  succcessChild: widget.succcessChild,
+                  successUrl: widget.request.successUrl,
+                  errorUrl: widget.request.errorUrl,
+                  afterPaymentBehaviour: widget.afterPaymentBehaviour,
+                ),
               ),
             ).then((value) {
-              var response = getResponse();
-              if (response.status != null &&
-                  response.status != PaymentStatus.None) {
-                if (widget.onResult != null)
-                  widget.onResult(response);
-                else
-                  Navigator.of(context).pop(response);
+              if (value is PaymentResponse) {
+                if (value.status != PaymentStatus.None) {
+                  if (widget.onResult != null)
+                    widget.onResult(value);
+                  else
+                    Navigator.of(context).pop(value);
+                }
               }
             });
           },

@@ -34,18 +34,35 @@ class MyFatoorah extends StatelessWidget {
 
     /// user this to customize the wrapper of paymentmethods
     /// thev default is `ListView`
-    Widget Function(List<Widget> methods) methodsBuilder,
+    Widget Function(List<Widget> methods) builder,
     @required MyfatoorahRequest request,
+    //Will be shown after failed payment `afterPaymentBehaviour must be none`
+    Widget errorChild,
+    //Will be shown after success payment `afterPaymentBehaviour must be none`
+    Widget succcessChild,
+
+    /// this will controles what happen after payment done
+    ///
+    /// `AfterPaymentBehaviour.None` the default value , nothing will happen
+    ///
+    /// `AfterPaymentBehaviour.AfterCalbacksExecution` will pop after payment done and error or success callbacks finish
+    ///
+    /// `AfterPaymentBehaviour.BeforeCalbacksExecution` will pop after payment done and before error or success callbacks start
+    AfterPaymentBehaviour afterPaymentBehaviour,
   }) {
     return showDialog(
       context: context,
       builder: (ctx) {
         return Dialog(
           child: _PaymentMethodsBuilder(
+            errorChild: errorChild,
+            succcessChild: succcessChild,
+            afterPaymentBehaviour:
+                afterPaymentBehaviour ?? AfterPaymentBehaviour.None,
             request: request,
             buildPaymentMethod: buildPaymentMethod,
             showServiceCharge: showServiceCharge,
-            paymentMethodsBuilder: methodsBuilder,
+            paymentMethodsBuilder: builder,
           ),
         );
       },
@@ -62,29 +79,49 @@ class MyFatoorah extends StatelessWidget {
 
   /// user this to customize the wrapper of paymentmethods
   /// thev default is `ListView`
-  final Widget Function(List<Widget> methods) methodsBuilder;
+  final Widget Function(List<Widget> methods) builder;
 
   final MyfatoorahRequest request;
   final Function(PaymentResponse res) onResult;
   //If this is true service charge will be shown in subtitle
   final bool showServiceCharge;
+  //Will be shown after failed payment `afterPaymentBehaviour must be none`
+  final Widget errorChild;
+  //Will be shown after error payment `afterPaymentBehaviour must be none`
+  final Widget succcessChild;
+
+  /// this will controles what happen after payment done
+  ///
+  /// `AfterPaymentBehaviour.None` the default value , nothing will happen
+  ///
+  /// `AfterPaymentBehaviour.AfterCalbacksExecution` will pop after payment done and error or success callbacks finish
+  ///
+  /// `AfterPaymentBehaviour.BeforeCalbacksExecution` will pop after payment done and before error or success callbacks start
+  final AfterPaymentBehaviour afterPaymentBehaviour;
   const MyFatoorah({
     Key key,
     this.buildPaymentMethod,
-    this.methodsBuilder,
+    this.builder,
     @required this.request,
     @required this.onResult,
     this.showServiceCharge = false,
+    this.errorChild,
+    this.succcessChild,
+    this.afterPaymentBehaviour,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return _PaymentMethodsBuilder(
       request: request,
+      errorChild: errorChild,
+      afterPaymentBehaviour:
+          afterPaymentBehaviour ?? AfterPaymentBehaviour.None,
+      succcessChild: succcessChild,
       onResult: onResult,
       showServiceCharge: showServiceCharge,
       buildPaymentMethod: buildPaymentMethod,
-      paymentMethodsBuilder: methodsBuilder,
+      paymentMethodsBuilder: builder,
     );
   }
 }

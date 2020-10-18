@@ -1,5 +1,12 @@
 ## 2.5.1
 
+* Move afterCallBackExcution to base properties
+* Update example
+* Add errorChild && succcessChild 
+* Rename methodsBuilder to builder
+
+## 2.5.1
+
 * Fix on result when back
 
 ## 2.5.0
