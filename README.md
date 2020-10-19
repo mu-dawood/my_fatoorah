@@ -2,9 +2,9 @@
 
 My Fatoorah Payment
 # Screenshots
-![](https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_1.png)
-![](https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_2.png)
-![](https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_3.png)
+![Demo](https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_1.png)
+![Demo](https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_2.png)
+![Demo](https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_3.png)
 
 
 ## Getting Started
