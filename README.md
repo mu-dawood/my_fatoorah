@@ -9,9 +9,9 @@ My Fatoorah Payment
      <td>result</td>
   </tr>
   <tr>
-    <td><img src="screen_1.png" width=270 height=480></td>
-    <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_2.png" width=270 height=480></td>
-    <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_3.png" width=270 height=480></td>
+    <td><img src="screen_1.png"></td>
+    <td><img src="screen_2.png"></td>
+    <td><img src="screen_3.png"></td>
   </tr>
  </table>
 
