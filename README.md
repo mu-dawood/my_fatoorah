@@ -2,10 +2,18 @@
 
 My Fatoorah Payment
 # Screenshots
-![Demo](https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_1.png)
-![Demo](https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_2.png)
-![Demo](https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_3.png)
-
+<table>
+  <tr>
+    <td>Payment methods</td>
+     <td>Card inputs</td>
+     <td>result</td>
+  </tr>
+  <tr>
+    <td><img src="screen_1.png" width=270 height=480></td>
+    <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_2.png" width=270 height=480></td>
+    <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_3.png" width=270 height=480></td>
+  </tr>
+ </table>
 
 ## Getting Started
 
