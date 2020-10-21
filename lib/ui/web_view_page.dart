@@ -89,6 +89,7 @@ class __WebViewPageState extends State<_WebViewPage>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        popResult();
         return false;
       },
       child: _build(context),

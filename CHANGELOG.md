@@ -1,3 +1,7 @@
+## 2.6.4
+
+* Fix system back button press
+
 ## 2.6.3
 
 * Fix appBar pop
