@@ -1,6 +1,11 @@
+## 2.6.3
+
+* Fix appBar pop
+
 ## 2.6.2
 
 * Fix show success and error childs after finish load
+* Add appBar property
 
 ## 2.6.0
 

@@ -4,7 +4,7 @@ class _WebViewPage extends StatefulWidget {
   final String url;
   final String successUrl;
   final String errorUrl;
-  final PreferredSizeWidget appBar;
+  final PreferredSizeWidget Function(VoidCallback back) getAppBar;
   final AfterPaymentBehaviour afterPaymentBehaviour;
   final Widget errorChild;
   final Widget succcessChild;
@@ -16,7 +16,7 @@ class _WebViewPage extends StatefulWidget {
     @required this.afterPaymentBehaviour,
     @required this.errorChild,
     @required this.succcessChild,
-    @required this.appBar,
+    @required this.getAppBar,
   }) : super(key: key);
   @override
   __WebViewPageState createState() => __WebViewPageState();
@@ -80,12 +80,15 @@ class __WebViewPageState extends State<_WebViewPage>
     super.initState();
   }
 
+  void popResult() {
+    Navigator.of(context)
+        .pop(currentResponse ?? PaymentResponse(PaymentStatus.None));
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context)
-            .pop(currentResponse ?? PaymentResponse(PaymentStatus.None));
         return false;
       },
       child: _build(context),
@@ -99,22 +102,27 @@ class __WebViewPageState extends State<_WebViewPage>
     Widget child;
     if (canShowResult && (isError || isSuccess))
       child = isSuccess ? widget.succcessChild : widget.errorChild;
+    var appBar = widget.getAppBar == null
+        ? AppBar(
+            leading: BackButton(onPressed: popResult),
+          )
+        : widget.getAppBar(popResult);
     if (child == null)
-      return buildWillPopScope(context);
+      return buildWillPopScope(context, appBar);
     else
       return Scaffold(
-        appBar: widget.appBar ?? AppBar(),
+        appBar: appBar,
         body: child,
       );
   }
 
-  Widget buildWillPopScope(BuildContext context) {
+  Widget buildWillPopScope(BuildContext context, PreferredSizeWidget appBar) {
     return Stack(
       fit: StackFit.expand,
       children: [
         Positioned.fill(
           child: WebviewScaffold(
-            appBar: widget.appBar ?? AppBar(),
+            appBar: appBar,
             url: widget.url,
             withJavascript: true,
             useWideViewPort: true,
