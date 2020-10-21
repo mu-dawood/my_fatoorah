@@ -3,6 +3,7 @@ part of my_fatoorah;
 class _PaymentMethodsBuilder extends StatefulWidget {
   final MyfatoorahRequest request;
   final Function(PaymentResponse res) onResult;
+  final PreferredSizeWidget appBar;
   final bool showServiceCharge;
   final Widget Function(PaymentMethod method, bool loading, String error)
       buildPaymentMethod;
@@ -20,6 +21,7 @@ class _PaymentMethodsBuilder extends StatefulWidget {
     @required this.errorChild,
     @required this.succcessChild,
     @required this.afterPaymentBehaviour,
+    @required this.appBar,
   }) : super(key: key);
   @override
   _PaymentMethodsBuilderState createState() => _PaymentMethodsBuilderState();
@@ -111,6 +113,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
               MaterialPageRoute(
                 builder: (context) => _WebViewPage(
                   url: _url,
+                  appBar: widget.appBar,
                   errorChild: widget.errorChild,
                   succcessChild: widget.succcessChild,
                   successUrl: widget.request.successUrl,

@@ -49,6 +49,7 @@ class MyFatoorah extends StatelessWidget {
     ///
     /// `AfterPaymentBehaviour.BeforeCalbacksExecution` will pop after payment done and before error or success callbacks start
     AfterPaymentBehaviour afterPaymentBehaviour,
+    PreferredSizeWidget appBar,
   }) {
     return showDialog(
       context: context,
@@ -56,6 +57,7 @@ class MyFatoorah extends StatelessWidget {
         return Dialog(
           child: _PaymentMethodsBuilder(
             errorChild: errorChild,
+            appBar: appBar,
             succcessChild: succcessChild,
             afterPaymentBehaviour:
                 afterPaymentBehaviour ?? AfterPaymentBehaviour.None,
@@ -98,6 +100,7 @@ class MyFatoorah extends StatelessWidget {
   ///
   /// `AfterPaymentBehaviour.BeforeCalbacksExecution` will pop after payment done and before error or success callbacks start
   final AfterPaymentBehaviour afterPaymentBehaviour;
+  final PreferredSizeWidget appBar;
   const MyFatoorah({
     Key key,
     this.buildPaymentMethod,
@@ -108,6 +111,7 @@ class MyFatoorah extends StatelessWidget {
     this.errorChild,
     this.succcessChild,
     this.afterPaymentBehaviour,
+    this.appBar,
   }) : super(key: key);
 
   @override
@@ -115,6 +119,7 @@ class MyFatoorah extends StatelessWidget {
     return _PaymentMethodsBuilder(
       request: request,
       errorChild: errorChild,
+      appBar: appBar,
       afterPaymentBehaviour:
           afterPaymentBehaviour ?? AfterPaymentBehaviour.None,
       succcessChild: succcessChild,

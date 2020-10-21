@@ -1,4 +1,8 @@
-## 2.5.1
+## 2.6.0
+
+* Fix show success and error childs after finish load
+
+## 2.6.0
 
 * Move afterCallBackExcution to base properties
 * Update example

@@ -4,6 +4,7 @@ class _WebViewPage extends StatefulWidget {
   final String url;
   final String successUrl;
   final String errorUrl;
+  final PreferredSizeWidget appBar;
   final AfterPaymentBehaviour afterPaymentBehaviour;
   final Widget errorChild;
   final Widget succcessChild;
@@ -15,6 +16,7 @@ class _WebViewPage extends StatefulWidget {
     @required this.afterPaymentBehaviour,
     @required this.errorChild,
     @required this.succcessChild,
+    @required this.appBar,
   }) : super(key: key);
   @override
   __WebViewPageState createState() => __WebViewPageState();
@@ -24,13 +26,17 @@ class __WebViewPageState extends State<_WebViewPage> {
   FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
   bool loading = true;
   PaymentResponse currentResponse;
-  void onUrlChanged(WebViewStateChanged state) {
-    currentResponse = _getResponse(state);
+  WebViewState state;
+  WebViewHttpError httpError;
+  void onUrlChanged(WebViewStateChanged _state) {
+    state = _state.type;
+    currentResponse = _getResponse(_state);
+
     assert(() {
-      print("MyFatoorah=> ${state.type} =>${state.url}");
+      print("MyFatoorah=> $state =>${_state.url}");
       return true;
     }());
-    if (state.type == WebViewState.shouldStart) {
+    if (state == WebViewState.shouldStart) {
       if (widget.afterPaymentBehaviour ==
           AfterPaymentBehaviour.BeforeCalbacksExecution) {
         if (currentResponse.status != PaymentStatus.None) {
@@ -38,7 +44,7 @@ class __WebViewPageState extends State<_WebViewPage> {
           return;
         }
       }
-    } else if (state.type == WebViewState.finishLoad) {
+    } else if (state == WebViewState.finishLoad) {
       if (widget.afterPaymentBehaviour ==
           AfterPaymentBehaviour.AfterCalbacksExecution) {
         if (currentResponse.status != PaymentStatus.None) {
@@ -47,8 +53,7 @@ class __WebViewPageState extends State<_WebViewPage> {
         }
       }
     }
-    if (state.type == WebViewState.shouldStart ||
-        state.type == WebViewState.startLoad) {
+    if (state == WebViewState.shouldStart || state == WebViewState.startLoad) {
       setState(() {
         loading = true;
       });
@@ -59,8 +64,17 @@ class __WebViewPageState extends State<_WebViewPage> {
     }
   }
 
+  void onHttpError(WebViewHttpError event) {
+    httpError = event;
+    assert(() {
+      print("MyFatoorah=> ${event.code} =>${event.url}");
+      return true;
+    }());
+  }
+
   @override
   void initState() {
+    flutterWebviewPlugin.onHttpError.listen(onHttpError);
     flutterWebviewPlugin.onStateChanged.listen(onUrlChanged);
     super.initState();
   }
@@ -80,50 +94,61 @@ class __WebViewPageState extends State<_WebViewPage> {
   Widget _build(BuildContext context) {
     var isSuccess = currentResponse?.status == PaymentStatus.Success;
     var isError = currentResponse?.status == PaymentStatus.Error;
+    var canShowResult = state == WebViewState.finishLoad;
     Widget child;
-    if (isError || isSuccess)
+    if (canShowResult && isError || isSuccess)
       child = isSuccess ? widget.succcessChild : widget.errorChild;
     if (child == null)
       return buildWillPopScope(context);
     else
       return Scaffold(
-        appBar: AppBar(),
+        appBar: widget.appBar ?? AppBar(),
         body: child,
       );
   }
 
   Widget buildWillPopScope(BuildContext context) {
-    return WebviewScaffold(
-      appBar: AppBar(
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(5),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Positioned.fill(
+          child: WebviewScaffold(
+            appBar: AppBar(),
+            url: widget.url,
+            withJavascript: true,
+            useWideViewPort: true,
+            withZoom: true,
+            hidden: true,
+            ignoreSSLErrors: true,
+          ),
+        ),
+        Positioned.fill(
           child: AnimatedOpacity(
             opacity: loading ? 1 : 0,
             duration: Duration(milliseconds: 300),
-            child: LinearProgressIndicator(),
+            child: Center(child: CircularProgressIndicator()),
           ),
         ),
-      ),
-      url: widget.url,
-      withJavascript: true,
-      useWideViewPort: true,
-      withZoom: true,
-      hidden: true,
-      ignoreSSLErrors: true,
+      ],
     );
   }
 
-  PaymentResponse _getResponse(WebViewStateChanged state) {
-    var isSuccess = state.url.contains(widget.successUrl);
-    var isError = state.url.contains(widget.errorUrl);
+  PaymentResponse _getResponse(WebViewStateChanged _state) {
+    var isSuccess = _state.url.contains(widget.successUrl);
+    var isError = _state.url.contains(widget.errorUrl);
     if (!isError && !isSuccess) return PaymentResponse(PaymentStatus.None);
     PaymentStatus status =
         isSuccess ? PaymentStatus.Success : PaymentStatus.Error;
-    Uri uri = Uri.parse(state.url);
+    if (isSuccess &&
+        (state == WebViewState.abortLoad || httpError?.url == _state.url)) {
+      status = PaymentStatus.Error;
+    }
+    Uri uri = Uri.parse(_state.url);
+
     return PaymentResponse(
       status,
       paymentId: uri.queryParameters["paymentId"],
-      url: state.url,
+      url: _state.url,
     );
   }
 }
