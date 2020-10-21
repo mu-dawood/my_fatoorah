@@ -96,7 +96,7 @@ class __WebViewPageState extends State<_WebViewPage> {
     var isError = currentResponse?.status == PaymentStatus.Error;
     var canShowResult = state == WebViewState.finishLoad;
     Widget child;
-    if (canShowResult && isError || isSuccess)
+    if (canShowResult && (isError || isSuccess))
       child = isSuccess ? widget.succcessChild : widget.errorChild;
     if (child == null)
       return buildWillPopScope(context);
