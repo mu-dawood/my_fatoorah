@@ -22,7 +22,8 @@ class _WebViewPage extends StatefulWidget {
   __WebViewPageState createState() => __WebViewPageState();
 }
 
-class __WebViewPageState extends State<_WebViewPage> {
+class __WebViewPageState extends State<_WebViewPage>
+    with TickerProviderStateMixin {
   FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
   bool loading = true;
   PaymentResponse currentResponse;
@@ -113,20 +114,20 @@ class __WebViewPageState extends State<_WebViewPage> {
       children: [
         Positioned.fill(
           child: WebviewScaffold(
-            appBar: AppBar(),
+            appBar: widget.appBar ?? AppBar(),
             url: widget.url,
             withJavascript: true,
             useWideViewPort: true,
             withZoom: true,
-            hidden: true,
+            hidden: loading,
             ignoreSSLErrors: true,
-          ),
-        ),
-        Positioned.fill(
-          child: AnimatedOpacity(
-            opacity: loading ? 1 : 0,
-            duration: Duration(milliseconds: 300),
-            child: Center(child: CircularProgressIndicator()),
+            bottomNavigationBar: AnimatedSize(
+              duration: Duration(milliseconds: 300),
+              vsync: this,
+              child: loading
+                  ? Center(child: CircularProgressIndicator())
+                  : SizedBox(),
+            ),
           ),
         ),
       ],
