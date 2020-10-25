@@ -1,3 +1,7 @@
+## 2.6.5
+
+* Add `filterPaymentMethods` property
+
 ## 2.6.4
 
 * Fix system back button press

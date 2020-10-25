@@ -11,6 +11,10 @@ class _PaymentMethodsBuilder extends StatefulWidget {
   final Widget errorChild;
   final Widget succcessChild;
   final AfterPaymentBehaviour afterPaymentBehaviour;
+
+  /// Filter payment methods after fetching it
+  final List<PaymentMethod> Function(List<PaymentMethod> methods)
+      filterPaymentMethods;
   const _PaymentMethodsBuilder({
     Key key,
     @required this.request,
@@ -22,6 +26,7 @@ class _PaymentMethodsBuilder extends StatefulWidget {
     @required this.succcessChild,
     @required this.afterPaymentBehaviour,
     @required this.getAppBar,
+    @required this.filterPaymentMethods,
   }) : super(key: key);
   @override
   _PaymentMethodsBuilderState createState() => _PaymentMethodsBuilderState();
@@ -47,6 +52,9 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
         var _response = _InitiatePaymentResponse.fromJson(json);
+        if (widget.filterPaymentMethods != null)
+          _response.data.paymentMethods =
+              widget.filterPaymentMethods(_response.data.paymentMethods);
         setState(() {
           methods = _response.isSuccess ? _response.data.paymentMethods : null;
           errorMessage = _response.isSuccess ? null : _response.message;

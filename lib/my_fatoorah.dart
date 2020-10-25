@@ -50,6 +50,10 @@ class MyFatoorah extends StatelessWidget {
     /// `AfterPaymentBehaviour.BeforeCalbacksExecution` will pop after payment done and before error or success callbacks start
     AfterPaymentBehaviour afterPaymentBehaviour,
     PreferredSizeWidget Function(VoidCallback back) getAppBar,
+
+    /// Filter payment methods after fetching it
+    final List<PaymentMethod> Function(List<PaymentMethod> methods)
+        filterPaymentMethods,
   }) {
     return showDialog(
       context: context,
@@ -59,6 +63,7 @@ class MyFatoorah extends StatelessWidget {
             errorChild: errorChild,
             getAppBar: getAppBar,
             succcessChild: succcessChild,
+            filterPaymentMethods: filterPaymentMethods,
             afterPaymentBehaviour:
                 afterPaymentBehaviour ?? AfterPaymentBehaviour.None,
             request: request,
@@ -82,6 +87,10 @@ class MyFatoorah extends StatelessWidget {
   /// user this to customize the wrapper of paymentmethods
   /// thev default is `ListView`
   final Widget Function(List<Widget> methods) builder;
+
+  /// Filter payment methods after fetching it
+  final List<PaymentMethod> Function(List<PaymentMethod> methods)
+      filterPaymentMethods;
 
   final MyfatoorahRequest request;
   final Function(PaymentResponse res) onResult;
@@ -112,6 +121,7 @@ class MyFatoorah extends StatelessWidget {
     this.succcessChild,
     this.afterPaymentBehaviour,
     this.getAppBar,
+    this.filterPaymentMethods,
   }) : super(key: key);
 
   @override
@@ -120,6 +130,7 @@ class MyFatoorah extends StatelessWidget {
       request: request,
       errorChild: errorChild,
       getAppBar: getAppBar,
+      filterPaymentMethods: filterPaymentMethods,
       afterPaymentBehaviour:
           afterPaymentBehaviour ?? AfterPaymentBehaviour.None,
       succcessChild: succcessChild,
