@@ -1,4 +1,4 @@
-## 2.6.5
+## 2.6.6
 
 * Update test token
 
