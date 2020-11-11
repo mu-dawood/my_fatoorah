@@ -1,5 +1,9 @@
 ## 2.6.5
 
+* Update test token
+
+## 2.6.5
+
 * Add `filterPaymentMethods` property
 
 ## 2.6.4
