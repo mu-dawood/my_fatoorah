@@ -75,7 +75,7 @@ import 'package:my_fatoorah/my_fatoorah.dart';
                           "Your error call back",
                       invoiceAmount: 100,
                       language: ApiLanguage.Arabic,
-                      token: null,
+                      token: "Your token here",
                       afterPaymentBehaviour:AfterPaymentBehaviour.None, //See the describe for this property for more details
                       ),
                 );
@@ -98,13 +98,17 @@ import 'package:my_fatoorah/my_fatoorah.dart';
                           "Your error call back",
                       invoiceAmount: 100,
                       language: ApiLanguage.Arabic,
-                      token: null,
+                      token: "Your token here",
                       afterPaymentBehaviour:AfterPaymentBehaviour.None, //See the describe for this property for more details
                       ),
  );
 ```
 
+
 ### Notes
 
-1. because my fatoorah sdk itself uses webview i removed all platform specified code and used webview plugin since v2
-2. after payment done the web view redirect automatically to error or success url thats mean these url has to return html content
+- Before version 2.6.7 we handeled test version if you pass token as null
+- But we may fatoorah changed thier demo information many times so you have to  pass them
+ in MyfatoorahRequest you have to pass url of the test version `https://apitest.myfatoorah.com`
+ and token of test version
+- you can find demo information here https://myfatoorah.readme.io/docs/demo-information

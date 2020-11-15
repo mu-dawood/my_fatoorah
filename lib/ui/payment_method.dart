@@ -33,7 +33,8 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
             widget.request.excutePaymentRequest(widget.method.paymentMethodId)),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "bearer ${widget.request.authorizationToken}"
+          "Authorization":
+              "bearer ${widget.request.token?.replaceAll("bearer ", "")}"
         }).then((response) {
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);

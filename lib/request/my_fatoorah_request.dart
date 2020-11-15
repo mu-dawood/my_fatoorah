@@ -23,9 +23,7 @@ part of my_fatoorah;
 /// so the value of the `invoiceAmount` should be 15
 
 class MyfatoorahRequest {
-  String get url => token != null
-      ? "https://api.myfatoorah.com"
-      : "https://apitest.myfatoorah.com";
+  final String url;
 
   /// url to use instead of my fatoorah url
   /// Must not be null if you run on the web
@@ -41,17 +39,12 @@ class MyfatoorahRequest {
   /// This url must return the base response of my fatoorah without any edits
   final String executePaymentUrl;
 
-  final _testToken =
-      "gqtDGpuJQkrzmxCcslg8RY8OnY0dSiHV65r5q-1kjt2lWDpvhtQRy712gF9AMdHwIiNUBwLWL8kMSvsIsrSxVJgrLTUXxBfiP4lCnMxe1KqOwKI5_C21UQjwJ-aHhVA93FDkWeuXoRFFfTDoUroeOXg9yoBWI9hjFndypdpjPI4_2PGLgwGzGRIy7bj_P_GzfpPODqRaZyn1bT-kjNoGF5fKkRopmdIlU2OeLV6lqDKF__smfyauGVTixIJKpmtxTa_p_YjRanbWBnWd13aBxTJSIVGBYszmK3pev1POgXDLO9K6b4pP8jT8Lodkl7f60osRDjLSiLKzt93ztrR0ERuu8sfpVa-eg-v3dBi870ZSPDNI7esQ7cQ9pe9OTj4JT8Hwef1zZuXCsBO7HzL2JQGYPyrx-iVQsv_0Bc7rhv1fHfLtsN3FrsQEq-aLzGtH-qRMq3S_M6T2-I-fQdgsbuHqDG6VKc2TXnId2SrAKX26kGSZfOH7rDYtb86Nu3iI-EMzztt8RnbpkBr9fKEtqOuJ0SNMhN716FgJKFei2mbOxMxVrZtTqu38fSh1m6WYWOy_48f6P2TYplMdo5S-G_J9PtkrUMs6eqzqhhjPWsppwtAJhb6rKhoBQkSHKpbKIWvzOOi826_ryUyNvMCmMlesgoWcWcQJEcob4RzB3OZjAgWQ";
-
   /// title for payment screen or popup window in web
   final String title;
 
   /// authorization token without bearer
   /// ### Leave it null to use test value
   final String token;
-
-  String get authorizationToken => token ?? _testToken;
 
   ///Language of  displaying payment methods
   final ApiLanguage language;
@@ -136,6 +129,7 @@ class MyfatoorahRequest {
     this.initiatePaymentUrl,
     this.executePaymentUrl,
     this.customerMobile,
+    this.url = "https://api.myfatoorah.com",
     this.title = "My fatoorah",
     this.customerName,
     this.customerEmail,

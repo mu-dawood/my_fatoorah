@@ -47,7 +47,8 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
         body: jsonEncode(widget.request.intiatePaymentRequest()),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "bearer ${widget.request.authorizationToken}",
+          "Authorization":
+              "bearer ${widget.request.token?.replaceAll("bearer ", "")}",
         }).then((response) {
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);

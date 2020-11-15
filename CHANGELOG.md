@@ -1,3 +1,8 @@
+## 2.6.7
+
+* allow to pass my fatoorah url
+* remove test token
+
 ## 2.6.6
 
 * Update test token
