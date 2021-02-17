@@ -2,14 +2,14 @@ part of my_fatoorah;
 
 class _PaymentMethodsBuilder extends StatefulWidget {
   final MyfatoorahRequest request;
-  final Function(PaymentResponse res) onResult;
   final PreferredSizeWidget Function(VoidCallback back) getAppBar;
   final bool showServiceCharge;
   final Widget Function(List<PaymentMethod> methods,
-      Future Function(PaymentMethod method) onSelect) builder;
+      Future<PaymentResponse> Function(PaymentMethod submit) onSelect) builder;
   final Widget errorChild;
   final Widget succcessChild;
   final AfterPaymentBehaviour afterPaymentBehaviour;
+  final bool isDialog;
 
   /// Filter payment methods after fetching it
   final List<PaymentMethod> Function(List<PaymentMethod> methods)
@@ -18,13 +18,13 @@ class _PaymentMethodsBuilder extends StatefulWidget {
     Key key,
     @required this.request,
     @required this.builder,
-    this.onResult,
     @required this.showServiceCharge,
     @required this.errorChild,
     @required this.succcessChild,
     @required this.afterPaymentBehaviour,
     @required this.getAppBar,
     @required this.filterPaymentMethods,
+    @required this.isDialog,
   }) : super(key: key);
   @override
   _PaymentMethodsBuilderState createState() => _PaymentMethodsBuilderState();
@@ -109,10 +109,12 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
       return buildError();
     } else {
       if (widget.builder != null)
-        return widget.builder(
-            methods,
-            (method) =>
-                _PaymentMethodItem.loadExcustion(widget.request, method));
+        return widget.builder(methods, (method) async {
+          var result =
+              await _PaymentMethodItem.loadExcustion(widget.request, method);
+          if (!result.isSuccess) throw result.message;
+          return _showWebView(result.data.paymentURL);
+        });
       return ListView(
         shrinkWrap: true,
         children: ListTile.divideTiles(
@@ -135,35 +137,37 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
                 method: method.withLangauge(widget.request.language),
                 request: widget.request,
                 onLaunch: (String _url) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => _WebViewPage(
-                        url: _url,
-                        getAppBar: widget.getAppBar,
-                        errorChild: widget.errorChild,
-                        succcessChild: widget.succcessChild,
-                        successUrl: widget.request.successUrl,
-                        errorUrl: widget.request.errorUrl,
-                        afterPaymentBehaviour: widget.afterPaymentBehaviour,
-                      ),
-                    ),
-                  ).then((value) {
-                    if (value is PaymentResponse) {
-                      if (value.status != PaymentStatus.None) {
-                        if (widget.onResult != null)
-                          widget.onResult(value);
-                        else
-                          Navigator.of(context).pop(value);
-                      }
-                    }
-                  });
+                  _showWebView(_url);
                 },
               )
           ],
         ).toList(),
       );
     }
+  }
+
+  Future<PaymentResponse> _showWebView(String url) {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => _WebViewPage(
+          url: url,
+          getAppBar: widget.getAppBar,
+          errorChild: widget.errorChild,
+          succcessChild: widget.succcessChild,
+          successUrl: widget.request.successUrl,
+          errorUrl: widget.request.errorUrl,
+          afterPaymentBehaviour: widget.afterPaymentBehaviour,
+        ),
+      ),
+    ).then((value) {
+      if (widget.isDialog) if (value is PaymentResponse) {
+        if (value.status != PaymentStatus.None) {
+          Navigator.of(context).pop(value);
+        }
+      }
+      return value;
+    });
   }
 
   Widget buildError() {

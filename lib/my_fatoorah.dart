@@ -27,10 +27,11 @@ class MyFatoorah extends StatelessWidget {
     //If this is true service charge will be shown in subtitle defaults to false
     bool showServiceCharge = false,
 
-    /// user this to customize the wrapper of paymentmethods
+    /// user this to build your own ui and then at the end call submit
+    /// submit method is future so you can wait it
     /// thev default is `ListView`
     Widget Function(List<PaymentMethod> methods,
-            Future Function(PaymentMethod method) onSelect)
+            Future Function(PaymentMethod method) submit)
         builder,
     @required MyfatoorahRequest request,
     //Will be shown after failed payment `afterPaymentBehaviour must be none`
@@ -59,6 +60,7 @@ class MyFatoorah extends StatelessWidget {
           child: _PaymentMethodsBuilder(
             errorChild: errorChild,
             getAppBar: getAppBar,
+            isDialog: true,
             succcessChild: succcessChild,
             filterPaymentMethods: filterPaymentMethods,
             afterPaymentBehaviour:
@@ -77,10 +79,11 @@ class MyFatoorah extends StatelessWidget {
     });
   }
 
-  /// user this to customize the wrapper of paymentmethods
+  /// user this to build your own ui and then at the end call submit
+  /// submit method is future so you can wait it
   /// thev default is `ListView`
   final Widget Function(List<PaymentMethod> methods,
-      Future Function(PaymentMethod method) onSelect) builder;
+      Future<PaymentResponse> Function(PaymentMethod method) submit) builder;
 
   /// Filter payment methods after fetching it
   final List<PaymentMethod> Function(List<PaymentMethod> methods)
@@ -127,7 +130,7 @@ class MyFatoorah extends StatelessWidget {
       afterPaymentBehaviour:
           afterPaymentBehaviour ?? AfterPaymentBehaviour.None,
       succcessChild: succcessChild,
-      onResult: onResult,
+      isDialog: false,
       showServiceCharge: showServiceCharge,
       builder: builder,
     );
