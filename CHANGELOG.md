@@ -1,3 +1,9 @@
+## 2.6.8
+
+* remove buildPaymentMethod 
+* add builder instead
+* you have now full control of what you do in builder 
+
 ## 2.6.7
 
 * allow to pass my fatoorah url

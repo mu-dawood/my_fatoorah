@@ -5,9 +5,8 @@ class _PaymentMethodsBuilder extends StatefulWidget {
   final Function(PaymentResponse res) onResult;
   final PreferredSizeWidget Function(VoidCallback back) getAppBar;
   final bool showServiceCharge;
-  final Widget Function(PaymentMethod method, bool loading, String error)
-      buildPaymentMethod;
-  final Widget Function(List<Widget> methods) paymentMethodsBuilder;
+  final Widget Function(List<PaymentMethod> methods,
+      Future Function(PaymentMethod method) onSelect) builder;
   final Widget errorChild;
   final Widget succcessChild;
   final AfterPaymentBehaviour afterPaymentBehaviour;
@@ -18,8 +17,7 @@ class _PaymentMethodsBuilder extends StatefulWidget {
   const _PaymentMethodsBuilder({
     Key key,
     @required this.request,
-    @required this.buildPaymentMethod,
-    @required this.paymentMethodsBuilder,
+    @required this.builder,
     this.onResult,
     @required this.showServiceCharge,
     @required this.errorChild,
@@ -110,41 +108,11 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
     } else if (errorMessage != null) {
       return buildError();
     } else {
-      List<Widget> childs = methods.map((e) {
-        return _PaymentMethodItem(
-          showServiceCharge: widget.showServiceCharge,
-          method: e.withLangauge(widget.request.language),
-          request: widget.request,
-          buildPaymentMethod: widget.buildPaymentMethod,
-          onLaunch: (String _url) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => _WebViewPage(
-                  url: _url,
-                  getAppBar: widget.getAppBar,
-                  errorChild: widget.errorChild,
-                  succcessChild: widget.succcessChild,
-                  successUrl: widget.request.successUrl,
-                  errorUrl: widget.request.errorUrl,
-                  afterPaymentBehaviour: widget.afterPaymentBehaviour,
-                ),
-              ),
-            ).then((value) {
-              if (value is PaymentResponse) {
-                if (value.status != PaymentStatus.None) {
-                  if (widget.onResult != null)
-                    widget.onResult(value);
-                  else
-                    Navigator.of(context).pop(value);
-                }
-              }
-            });
-          },
-        );
-      }).toList();
-      if (widget.paymentMethodsBuilder != null)
-        return widget.paymentMethodsBuilder(childs);
+      if (widget.builder != null)
+        return widget.builder(
+            methods,
+            (method) =>
+                _PaymentMethodItem.loadExcustion(widget.request, method));
       return ListView(
         shrinkWrap: true,
         children: ListTile.divideTiles(
@@ -161,7 +129,37 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
                 ),
               ),
             ),
-            ...childs,
+            for (var method in methods)
+              _PaymentMethodItem(
+                showServiceCharge: widget.showServiceCharge,
+                method: method.withLangauge(widget.request.language),
+                request: widget.request,
+                onLaunch: (String _url) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => _WebViewPage(
+                        url: _url,
+                        getAppBar: widget.getAppBar,
+                        errorChild: widget.errorChild,
+                        succcessChild: widget.succcessChild,
+                        successUrl: widget.request.successUrl,
+                        errorUrl: widget.request.errorUrl,
+                        afterPaymentBehaviour: widget.afterPaymentBehaviour,
+                      ),
+                    ),
+                  ).then((value) {
+                    if (value is PaymentResponse) {
+                      if (value.status != PaymentStatus.None) {
+                        if (widget.onResult != null)
+                          widget.onResult(value);
+                        else
+                          Navigator.of(context).pop(value);
+                      }
+                    }
+                  });
+                },
+              )
           ],
         ).toList(),
       );

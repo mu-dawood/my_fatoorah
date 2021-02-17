@@ -27,14 +27,11 @@ class MyFatoorah extends StatelessWidget {
     //If this is true service charge will be shown in subtitle defaults to false
     bool showServiceCharge = false,
 
-    /// user this to customize the single payment method
-    /// thev default is `ListTile`
-    Widget Function(PaymentMethod method, bool loading, String error)
-        buildPaymentMethod,
-
     /// user this to customize the wrapper of paymentmethods
     /// thev default is `ListView`
-    Widget Function(List<Widget> methods) builder,
+    Widget Function(List<PaymentMethod> methods,
+            Future Function(PaymentMethod method) onSelect)
+        builder,
     @required MyfatoorahRequest request,
     //Will be shown after failed payment `afterPaymentBehaviour must be none`
     Widget errorChild,
@@ -67,9 +64,8 @@ class MyFatoorah extends StatelessWidget {
             afterPaymentBehaviour:
                 afterPaymentBehaviour ?? AfterPaymentBehaviour.None,
             request: request,
-            buildPaymentMethod: buildPaymentMethod,
             showServiceCharge: showServiceCharge,
-            paymentMethodsBuilder: builder,
+            builder: builder,
           ),
         );
       },
@@ -81,12 +77,10 @@ class MyFatoorah extends StatelessWidget {
     });
   }
 
-  final Widget Function(PaymentMethod method, bool loading, String error)
-      buildPaymentMethod;
-
   /// user this to customize the wrapper of paymentmethods
   /// thev default is `ListView`
-  final Widget Function(List<Widget> methods) builder;
+  final Widget Function(List<PaymentMethod> methods,
+      Future Function(PaymentMethod method) onSelect) builder;
 
   /// Filter payment methods after fetching it
   final List<PaymentMethod> Function(List<PaymentMethod> methods)
@@ -112,7 +106,6 @@ class MyFatoorah extends StatelessWidget {
   final PreferredSizeWidget Function(VoidCallback back) getAppBar;
   const MyFatoorah({
     Key key,
-    this.buildPaymentMethod,
     this.builder,
     @required this.request,
     @required this.onResult,
@@ -136,8 +129,7 @@ class MyFatoorah extends StatelessWidget {
       succcessChild: succcessChild,
       onResult: onResult,
       showServiceCharge: showServiceCharge,
-      buildPaymentMethod: buildPaymentMethod,
-      paymentMethodsBuilder: builder,
+      builder: builder,
     );
   }
 }

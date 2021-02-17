@@ -11,7 +11,7 @@ abstract class _MyFatoorahResponse<T> {
     isSuccess = json['IsSuccess'] == true || json['isSuccess'] == true;
     message = json['Message'] ?? json['message'] ?? "";
     if (json['ValidationErrors'] != null || json['validationErrors'] != null) {
-      validationErrors = new List<_ValidationErrors>();
+      validationErrors = <_ValidationErrors>[];
       (json['ValidationErrors'] ?? json['validationErrors']).forEach((v) {
         validationErrors.add(new _ValidationErrors.fromJson(v));
       });

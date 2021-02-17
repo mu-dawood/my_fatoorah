@@ -99,7 +99,7 @@ class InnerPage extends StatelessWidget {
               ),
             ),
             onResult: (PaymentResponse res) {
-              Scaffold.of(context).showSnackBar(SnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(res.status.toString()),
               ));
             },

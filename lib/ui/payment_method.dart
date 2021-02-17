@@ -5,36 +5,25 @@ class _PaymentMethodItem extends StatefulWidget {
   final MyfatoorahRequest request;
   final Function(String url) onLaunch;
   final bool showServiceCharge;
-  final Widget Function(PaymentMethod method, bool loading, String error)
-      buildPaymentMethod;
 
   const _PaymentMethodItem({
     Key key,
     @required this.method,
-    this.buildPaymentMethod,
     @required this.request,
     @required this.onLaunch,
     @required this.showServiceCharge,
   }) : super(key: key);
   @override
   __PaymentMethodItemState createState() => __PaymentMethodItemState();
-}
 
-class __PaymentMethodItemState extends State<_PaymentMethodItem>
-    with TickerProviderStateMixin {
-  bool loading = false;
-  String error;
-
-  Future<_ExcutePaymentResponse> loadExcustion() {
-    var url = widget.request.executePaymentUrl ??
-        '${widget.request.url}/v2/ExecutePayment';
+  static Future<_ExcutePaymentResponse> loadExcustion(
+      MyfatoorahRequest request, PaymentMethod method) {
+    var url = request.executePaymentUrl ?? '${request.url}/v2/ExecutePayment';
     return http.post(url,
-        body: jsonEncode(
-            widget.request.excutePaymentRequest(widget.method.paymentMethodId)),
+        body: jsonEncode(request.excutePaymentRequest(method.paymentMethodId)),
         headers: {
           "Content-Type": "application/json",
-          "Authorization":
-              "bearer ${widget.request.token?.replaceAll("bearer ", "")}"
+          "Authorization": "bearer ${request.token?.replaceAll("bearer ", "")}"
         }).then((response) {
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
@@ -49,12 +38,19 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
       }
     });
   }
+}
+
+class __PaymentMethodItemState extends State<_PaymentMethodItem>
+    with TickerProviderStateMixin {
+  bool loading = false;
+  String error;
 
   Future onPressed() {
     setState(() {
       loading = true;
     });
-    return loadExcustion().then((response) {
+    return _PaymentMethodItem.loadExcustion(widget.request, widget.method)
+        .then((response) {
       setState(() {
         loading = false;
       });
@@ -76,12 +72,6 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.buildPaymentMethod != null) {
-      return InkWell(
-        onTap: onPressed,
-        child: widget.buildPaymentMethod(widget.method, loading, error),
-      );
-    }
     return AnimatedSize(
       vsync: this,
       duration: Duration(milliseconds: 300),
