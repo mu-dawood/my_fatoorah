@@ -1,3 +1,6 @@
+## 2.7.1
+* fix payment method name language
+
 ## 2.7.0
 
 * add loading state to builder

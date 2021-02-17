@@ -63,7 +63,11 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
           _response.data.paymentMethods =
               widget.filterPaymentMethods(_response.data.paymentMethods);
         setState(() {
-          methods = _response.isSuccess ? _response.data.paymentMethods : null;
+          methods = _response.isSuccess
+              ? _response.data.paymentMethods
+                  .map((e) => e.withLangauge(widget.request.language))
+                  .toList()
+              : null;
           errorMessage = _response.isSuccess ? null : _response.message;
           loading = false;
         });

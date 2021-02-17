@@ -35,7 +35,17 @@ class PaymentMethod {
     currencyIso = json['CurrencyIso'] ?? json['currencyIso'] ?? "";
     imageUrl = json['ImageUrl'] ?? json['imageUrl'] ?? "";
   }
-  PaymentMethod withLangauge(ApiLanguage language) {
-    return this..language = language;
+  PaymentMethod withLangauge(ApiLanguage _language) {
+    return PaymentMethod.fromJson({})
+      .._paymentMethodAr = _paymentMethodAr
+      .._paymentMethodEn = _paymentMethodEn
+      ..paymentMethodCode = paymentMethodCode
+      ..language = _language
+      ..isDirectPayment = isDirectPayment
+      ..serviceCharge = serviceCharge
+      .._totalAmount = _totalAmount
+      ..currencyIso = currencyIso
+      ..imageUrl = imageUrl
+      ..paymentMethodId = paymentMethodId;
   }
 }
