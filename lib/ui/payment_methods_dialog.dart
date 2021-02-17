@@ -1,15 +1,23 @@
 part of my_fatoorah;
 
+class LoadingState {
+  final bool loading;
+  final String error;
+  bool get hasError => error != null;
+
+  LoadingState(this.loading, this.error);
+}
+
 class _PaymentMethodsBuilder extends StatefulWidget {
   final MyfatoorahRequest request;
   final PreferredSizeWidget Function(VoidCallback back) getAppBar;
   final bool showServiceCharge;
-  final Widget Function(List<PaymentMethod> methods,
+  final Widget Function(List<PaymentMethod> methods, LoadingState state,
       Future<PaymentResponse> Function(PaymentMethod submit) onSelect) builder;
   final Widget errorChild;
   final Widget succcessChild;
   final AfterPaymentBehaviour afterPaymentBehaviour;
-  final bool isDialog;
+  final Function(PaymentResponse res) onResult;
 
   /// Filter payment methods after fetching it
   final List<PaymentMethod> Function(List<PaymentMethod> methods)
@@ -24,7 +32,7 @@ class _PaymentMethodsBuilder extends StatefulWidget {
     @required this.afterPaymentBehaviour,
     @required this.getAppBar,
     @required this.filterPaymentMethods,
-    @required this.isDialog,
+    @required this.onResult,
   }) : super(key: key);
   @override
   _PaymentMethodsBuilderState createState() => _PaymentMethodsBuilderState();
@@ -103,18 +111,19 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
   }
 
   Widget buildChild() {
+    if (widget.builder != null)
+      return widget.builder(methods, LoadingState(loading, errorMessage),
+          (method) async {
+        var result =
+            await _PaymentMethodItem.loadExcustion(widget.request, method);
+        if (!result.isSuccess) throw result.message;
+        return _showWebView(result.data.paymentURL);
+      });
     if (loading == true) {
       return buildLoading();
     } else if (errorMessage != null) {
       return buildError();
     } else {
-      if (widget.builder != null)
-        return widget.builder(methods, (method) async {
-          var result =
-              await _PaymentMethodItem.loadExcustion(widget.request, method);
-          if (!result.isSuccess) throw result.message;
-          return _showWebView(result.data.paymentURL);
-        });
       return ListView(
         shrinkWrap: true,
         children: ListTile.divideTiles(
@@ -161,11 +170,16 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
         ),
       ),
     ).then((value) {
-      if (widget.isDialog) if (value is PaymentResponse) {
-        if (value.status != PaymentStatus.None) {
-          Navigator.of(context).pop(value);
+      if (widget.onResult == null) {
+        if (value is PaymentResponse) {
+          if (value.status != PaymentStatus.None) {
+            Navigator.of(context).pop(value);
+          }
         }
+      } else {
+        if (value is PaymentResponse) widget.onResult(value);
       }
+
       return value;
     });
   }

@@ -1,3 +1,7 @@
+## 2.7.0
+
+* add loading state to builder
+
 ## 2.6.8
 
 * remove buildPaymentMethod 

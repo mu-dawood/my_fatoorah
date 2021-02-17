@@ -30,7 +30,7 @@ class MyFatoorah extends StatelessWidget {
     /// user this to build your own ui and then at the end call submit
     /// submit method is future so you can wait it
     /// thev default is `ListView`
-    Widget Function(List<PaymentMethod> methods,
+    Widget Function(List<PaymentMethod> methods, LoadingState state,
             Future Function(PaymentMethod method) submit)
         builder,
     @required MyfatoorahRequest request,
@@ -60,7 +60,7 @@ class MyFatoorah extends StatelessWidget {
           child: _PaymentMethodsBuilder(
             errorChild: errorChild,
             getAppBar: getAppBar,
-            isDialog: true,
+            onResult: null,
             succcessChild: succcessChild,
             filterPaymentMethods: filterPaymentMethods,
             afterPaymentBehaviour:
@@ -82,7 +82,7 @@ class MyFatoorah extends StatelessWidget {
   /// user this to build your own ui and then at the end call submit
   /// submit method is future so you can wait it
   /// thev default is `ListView`
-  final Widget Function(List<PaymentMethod> methods,
+  final Widget Function(List<PaymentMethod> methods, LoadingState state,
       Future<PaymentResponse> Function(PaymentMethod method) submit) builder;
 
   /// Filter payment methods after fetching it
@@ -96,6 +96,7 @@ class MyFatoorah extends StatelessWidget {
   final Widget errorChild;
   //Will be shown after error payment `afterPaymentBehaviour must be none`
   final Widget succcessChild;
+  final Function(PaymentResponse res) onResult;
 
   /// this will controles what happen after payment done
   ///
@@ -116,6 +117,7 @@ class MyFatoorah extends StatelessWidget {
     this.afterPaymentBehaviour,
     this.getAppBar,
     this.filterPaymentMethods,
+    this.onResult,
   }) : super(key: key);
 
   @override
@@ -128,7 +130,7 @@ class MyFatoorah extends StatelessWidget {
       afterPaymentBehaviour:
           afterPaymentBehaviour ?? AfterPaymentBehaviour.None,
       succcessChild: succcessChild,
-      isDialog: false,
+      onResult: onResult ?? (v) {},
       showServiceCharge: showServiceCharge,
       builder: builder,
     );
