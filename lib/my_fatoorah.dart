@@ -90,7 +90,6 @@ class MyFatoorah extends StatelessWidget {
       filterPaymentMethods;
 
   final MyfatoorahRequest request;
-  final Function(PaymentResponse res) onResult;
   //If this is true service charge will be shown in subtitle
   final bool showServiceCharge;
   //Will be shown after failed payment `afterPaymentBehaviour must be none`
@@ -111,7 +110,6 @@ class MyFatoorah extends StatelessWidget {
     Key key,
     this.builder,
     @required this.request,
-    @required this.onResult,
     this.showServiceCharge = false,
     this.errorChild,
     this.succcessChild,
