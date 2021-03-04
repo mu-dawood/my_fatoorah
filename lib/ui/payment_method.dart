@@ -7,11 +7,11 @@ class _PaymentMethodItem extends StatefulWidget {
   final bool showServiceCharge;
 
   const _PaymentMethodItem({
-    Key key,
-    @required this.method,
-    @required this.request,
-    @required this.onLaunch,
-    @required this.showServiceCharge,
+    Key? key,
+    required this.method,
+    required this.request,
+    required this.onLaunch,
+    required this.showServiceCharge,
   }) : super(key: key);
   @override
   __PaymentMethodItemState createState() => __PaymentMethodItemState();
@@ -19,11 +19,11 @@ class _PaymentMethodItem extends StatefulWidget {
   static Future<_ExcutePaymentResponse> loadExcustion(
       MyfatoorahRequest request, PaymentMethod method) {
     var url = request.executePaymentUrl ?? '${request.url}/v2/ExecutePayment';
-    return http.post(url,
-        body: jsonEncode(request.excutePaymentRequest(method.paymentMethodId)),
+    return http.post(Uri.parse(url),
+        body: jsonEncode(request.excutePaymentRequest(method.paymentMethodId!)),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "bearer ${request.token?.replaceAll("bearer ", "")}"
+          "Authorization": "bearer ${request.token.replaceAll("bearer ", "")}"
         }).then((response) {
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
@@ -43,7 +43,7 @@ class _PaymentMethodItem extends StatefulWidget {
 class __PaymentMethodItemState extends State<_PaymentMethodItem>
     with TickerProviderStateMixin {
   bool loading = false;
-  String error;
+  String? error;
 
   Future onPressed() {
     setState(() {
@@ -54,11 +54,11 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
       setState(() {
         loading = false;
       });
-      widget.onLaunch(response.data.paymentURL);
+      widget.onLaunch(response.data!.paymentURL);
     }).catchError(showError);
   }
 
-  void showError(dynamic _error) {
+  FutureOr<Null> showError(dynamic _error) {
     setState(() {
       error = _error.toString();
       loading = false;
@@ -85,7 +85,7 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
               color: Colors.black12,
               padding: EdgeInsets.all(15),
               child: Text(
-                error,
+                error ?? "",
                 textAlign: TextAlign.center,
               ),
             ),

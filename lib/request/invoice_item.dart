@@ -11,9 +11,9 @@ class InvoiceItem {
   int unitPrice;
 
   InvoiceItem({
-    @required this.itemName,
-    @required this.quantity,
-    @required this.unitPrice,
+    required this.itemName,
+    required this.quantity,
+    required this.unitPrice,
   });
 
   Map<String, dynamic> toJson() {

@@ -11,11 +11,11 @@ class _ExcutePaymentResponse
 }
 
 class _ExcutePaymentResponseData {
-  int invoiceId;
-  bool isDirectPayment;
-  String paymentURL;
-  String customerReference;
-  String userDefinedField;
+  int? invoiceId;
+  late bool isDirectPayment;
+  late String paymentURL;
+  late String customerReference;
+  late String userDefinedField;
 
   _ExcutePaymentResponseData.fromJson(Map<String, dynamic> json) {
     invoiceId = int.tryParse(

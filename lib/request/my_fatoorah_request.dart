@@ -30,14 +30,14 @@ class MyfatoorahRequest {
   /// if you set initiatePaymentUrl or executePayment you can set token equal to null
   /// and make these urls set the token from backend for security reasons
   /// This url must return the base response of my fatoorah without any edits
-  final String initiatePaymentUrl;
+  final String? initiatePaymentUrl;
 
   /// url to use instead of my fatoorah url
   /// Must not be null if you run on the web
   /// if you set initiatePaymentUrl or executePayment you can set token equal to null
   /// and make these urls set the token from backend for security reasons
   /// This url must return the base response of my fatoorah without any edits
-  final String executePaymentUrl;
+  final String? executePaymentUrl;
 
   /// title for payment screen or popup window in web
   final String title;
@@ -91,40 +91,40 @@ class MyfatoorahRequest {
   final Country currencyIso;
 
   /// Customer mobile number country code
-  final String mobileCountryCode;
+  final String? mobileCountryCode;
 
   /// Customer mobile number
-  final String customerMobile;
-  final String customerEmail;
-  final String customerName;
+  final String? customerMobile;
+  final String? customerEmail;
+  final String? customerName;
 
   ///Refers to the order or transaction ID in your own system and you can use for payment inquiry as well
-  final String customerReference;
+  final String? customerReference;
 
   ///Your customer civil ID that you can associate with the transaction if needed
-  final String customerCivilId;
+  final String? customerCivilId;
 
   ///A custom field that you may use as additional information to be stored with the transaction
-  final String userDefinedField;
+  final String? userDefinedField;
 
-  final CustomerAddress customerAddress;
+  final CustomerAddress? customerAddress;
 
   ///The date you want the payment to be expired, if not passed the default is considered from the account profile in the portal
-  final DateTime expiryDate;
+  final DateTime? expiryDate;
 
   /// The supplier code you need to associate the invoice with, please refer to `Multi Vendors` feature
   ///
   /// [https://myfatoorah.readme.io/docs/multi-vendors]
-  final String supplierCode;
-  final List<InvoiceItem> invoiceItems;
+  final String? supplierCode;
+  final List<InvoiceItem>? invoiceItems;
 
   MyfatoorahRequest({
-    @required this.token,
-    @required this.language,
-    @required this.invoiceAmount,
-    @required this.successUrl,
-    @required this.errorUrl,
-    @required this.currencyIso,
+    required this.token,
+    required this.language,
+    required this.invoiceAmount,
+    required this.successUrl,
+    required this.errorUrl,
+    required this.currencyIso,
     this.mobileCountryCode,
     this.initiatePaymentUrl,
     this.executePaymentUrl,
@@ -157,11 +157,11 @@ class MyfatoorahRequest {
       "CustomerCivilId": customerCivilId,
       "UserDefinedField": userDefinedField,
       "CustomerAddress": customerAddress?.toJson(),
-      "ExpiryDate": expiryDate?.toUtc()?.toIso8601String(),
+      "ExpiryDate": expiryDate?.toUtc().toIso8601String(),
       "SupplierCode": supplierCode,
       "InvoiceItems": invoiceItems?.map<Map<String, dynamic>>((e) {
         return e.toJson();
-      })?.toList(),
+      }).toList(),
     };
     data.removeWhere((key, value) => value == null);
     return data;

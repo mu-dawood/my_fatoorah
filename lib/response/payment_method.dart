@@ -1,20 +1,20 @@
 part of my_fatoorah;
 
 class PaymentMethod {
-  int paymentMethodId;
-  String _paymentMethodAr;
-  String _paymentMethodEn;
+  int? paymentMethodId;
+  late String _paymentMethodAr;
+  late String _paymentMethodEn;
   String get paymentMethod =>
-      language == ApiLanguage.Arabic ? _paymentMethodAr : _paymentMethodEn;
-  String paymentMethodCode;
-  bool isDirectPayment;
-  double serviceCharge;
-  double _totalAmount;
+      language == ApiLanguage.English ? _paymentMethodEn : _paymentMethodAr;
+  late String paymentMethodCode;
+  late bool isDirectPayment;
+  late double serviceCharge;
+  late double _totalAmount;
   double get totalAmount => _totalAmount + serviceCharge;
   double get totalWithoutCharge => _totalAmount;
-  String currencyIso;
-  String imageUrl;
-  ApiLanguage language;
+  late String currencyIso;
+  late String imageUrl;
+  ApiLanguage? language;
 
   PaymentMethod.fromJson(Map<String, dynamic> json) {
     paymentMethodId = int.tryParse(

@@ -1,4 +1,10 @@
+## 3.0.0
+
+* null sefety support
+* use pedantic
+
 ## 2.7.1
+
 * fix payment method name language
 
 ## 2.7.0

@@ -11,8 +11,9 @@ class _InitiatePaymentResponse
 }
 
 class _InitiatePaymentResponseData {
-  List<PaymentMethod> paymentMethods;
+  late List<PaymentMethod> paymentMethods;
   _InitiatePaymentResponseData.fromJson(Map<String, dynamic> json) {
+    paymentMethods = [];
     if (json['PaymentMethods'] != null || json['paymentMethods'] != null) {
       paymentMethods = <PaymentMethod>[];
       (json['PaymentMethods'] ?? json['paymentMethods']).forEach((v) {

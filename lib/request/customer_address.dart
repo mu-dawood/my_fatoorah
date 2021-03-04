@@ -17,11 +17,11 @@ class CustomerAddress {
   String addressInstructions;
 
   CustomerAddress({
-    this.block,
-    this.street,
-    this.houseBuildingNo,
-    this.address,
-    this.addressInstructions,
+    required this.block,
+    required this.street,
+    required this.houseBuildingNo,
+    required this.address,
+    required this.addressInstructions,
   });
 
   Map<String, dynamic> toJson() {
