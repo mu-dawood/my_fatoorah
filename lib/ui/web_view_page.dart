@@ -103,21 +103,43 @@ class __WebViewPageState extends State<_WebViewPage>
             Expanded(
               child: InAppWebView(
                 initialUrlRequest: URLRequest(url: widget.uri),
+                initialOptions: InAppWebViewGroupOptions(
+                  crossPlatform: InAppWebViewOptions(
+                    javaScriptEnabled: true,
+                    javaScriptCanOpenWindowsAutomatically: true,
+                  ),
+                ),
                 onWebViewCreated: (InAppWebViewController controller) {
                   this.controller = controller;
                 },
                 onLoadStart: (InAppWebViewController controller, Uri? uri) {
+                  assert((() {
+                    print("Start: $uri");
+                    return true;
+                  })());
                   setStart(uri);
                 },
                 onLoadError: (InAppWebViewController controller, Uri? uri,
                     int status, String error) {
+                  assert((() {
+                    print("Error: $uri");
+                    return true;
+                  })());
                   setError(uri, error);
                 },
                 onLoadHttpError: (InAppWebViewController controller, Uri? uri,
                     int status, String error) {
+                  assert((() {
+                    print("HttpError: $uri");
+                    return true;
+                  })());
                   setError(uri, error);
                 },
                 onLoadStop: (InAppWebViewController controller, Uri? uri) {
+                  assert((() {
+                    print("Stop: $uri");
+                    return true;
+                  })());
                   setStop(uri);
                 },
                 onProgressChanged:
