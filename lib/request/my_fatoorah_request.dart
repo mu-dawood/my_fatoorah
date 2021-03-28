@@ -39,9 +39,6 @@ class MyfatoorahRequest {
   /// This url must return the base response of my fatoorah without any edits
   final String? executePaymentUrl;
 
-  /// title for payment screen or popup window in web
-  final String title;
-
   /// authorization token without bearer
   /// ### Leave it null to use test value
   final String token;
@@ -117,7 +114,7 @@ class MyfatoorahRequest {
   /// [https://myfatoorah.readme.io/docs/multi-vendors]
   final String? supplierCode;
   final List<InvoiceItem>? invoiceItems;
-
+  @Deprecated("Use `MyfatoorahRequest.test` or MyfatoorahRequest.live")
   MyfatoorahRequest({
     required this.token,
     required this.language,
@@ -130,7 +127,6 @@ class MyfatoorahRequest {
     this.executePaymentUrl,
     this.customerMobile,
     this.url = "https://api.myfatoorah.com",
-    this.title = "My fatoorah",
     this.customerName,
     this.customerEmail,
     this.customerReference,
@@ -141,6 +137,49 @@ class MyfatoorahRequest {
     this.supplierCode,
     this.invoiceItems,
   });
+
+  MyfatoorahRequest.live({
+    required this.token,
+    required this.language,
+    required this.invoiceAmount,
+    required this.successUrl,
+    required this.errorUrl,
+    required this.currencyIso,
+    this.mobileCountryCode,
+    this.initiatePaymentUrl,
+    this.executePaymentUrl,
+    this.customerMobile,
+    this.customerName,
+    this.customerEmail,
+    this.customerReference,
+    this.customerCivilId,
+    this.userDefinedField,
+    this.customerAddress,
+    this.expiryDate,
+    this.supplierCode,
+    this.invoiceItems,
+  }) : url = "https://api.myfatoorah.com";
+  MyfatoorahRequest.test({
+    required this.token,
+    required this.language,
+    required this.invoiceAmount,
+    required this.successUrl,
+    required this.errorUrl,
+    required this.currencyIso,
+    this.mobileCountryCode,
+    this.initiatePaymentUrl,
+    this.executePaymentUrl,
+    this.customerMobile,
+    this.customerName,
+    this.customerEmail,
+    this.customerReference,
+    this.customerCivilId,
+    this.userDefinedField,
+    this.customerAddress,
+    this.expiryDate,
+    this.supplierCode,
+    this.invoiceItems,
+  }) : url = "https://apitest.myfatoorah.com";
   Map<String, dynamic> excutePaymentRequest(int paymentMethod) {
     var data = {
       "PaymentMethodId": paymentMethod,

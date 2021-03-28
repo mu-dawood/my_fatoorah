@@ -1,3 +1,8 @@
+## 3.0.2
+
+* add `MyfatoorahRequest.test` 
+* add `MyfatoorahRequest.live`
+
 ## 3.0.0
 
 * null sefety support

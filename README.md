@@ -9,9 +9,9 @@ My Fatoorah Payment
      <td>result</td>
   </tr>
   <tr>
-    <td><img src="screen_1.png"></td>
-    <td><img src="screen_2.png"></td>
-    <td><img src="screen_3.png"></td>
+    <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_1.png"></td>
+    <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_2.png"></td>
+    <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_3.png"></td>
   </tr>
  </table>
 
@@ -108,7 +108,8 @@ import 'package:my_fatoorah/my_fatoorah.dart';
 ### Notes
 
 - Before version 2.6.7 we handeled test version if you pass token as null
-- But we may fatoorah changed thier demo information many times so you have to  pass them
+- But  may  my fatoorah changed their demo information many times so you have to  pass them
  in MyfatoorahRequest you have to pass url of the test version `https://apitest.myfatoorah.com`
  and token of test version
 - you can find demo information here https://myfatoorah.readme.io/docs/demo-information
+- after version 3.0.2 you can use `MyfatoorahRequest.test` or `MyfatoorahRequest.live`
