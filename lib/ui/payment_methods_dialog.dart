@@ -158,7 +158,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
     }
   }
 
-  Future<PaymentResponse> _showWebView(String url) {
+  Future<PaymentResponse> _showWebView(String url) async {
     return Navigator.push(
       context,
       MaterialPageRoute(

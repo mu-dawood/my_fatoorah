@@ -1,5 +1,45 @@
 part of my_fatoorah;
 
+// class MyChromeSafariBrowser extends ChromeSafariBrowser {
+//   @override
+//   void onOpened() {
+//     print("ChromeSafari browser opened");
+//   }
+
+//   @override
+//   void onCompletedInitialLoad() {
+//     print("ChromeSafari browser initial load completed");
+//   }
+
+//   @override
+//   void onClosed() {
+//     print("ChromeSafari browser closed");
+//   }
+
+//   static Future openB({
+//     required Uri uri,
+//     required String successUrl,
+//     required String errorUrl,
+//     PreferredSizeWidget Function(BuildContext contex)? getAppBar,
+//     required AfterPaymentBehaviour afterPaymentBehaviour,
+//     Widget? errorChild,
+//     Widget? succcessChild,
+//   }) async {
+//     var browser = MyChromeSafariBrowser();
+//     await browser.open(
+//       url: uri,
+//       options: ChromeSafariBrowserClassOptions(
+//         android: AndroidChromeCustomTabsOptions(
+//             addDefaultShareMenuItem: false, keepAliveEnabled: true),
+//         ios: IOSSafariOptions(
+//           dismissButtonStyle: IOSSafariDismissButtonStyle.CLOSE,
+//           presentationStyle: IOSUIModalPresentationStyle.FULL_SCREEN,
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 class _WebViewPage extends StatefulWidget {
   final Uri uri;
   final String successUrl;
@@ -107,6 +147,9 @@ class __WebViewPageState extends State<_WebViewPage>
                   crossPlatform: InAppWebViewOptions(
                     javaScriptEnabled: true,
                     javaScriptCanOpenWindowsAutomatically: true,
+                  ),
+                  ios: IOSInAppWebViewOptions(
+                    applePayAPIEnabled: true,
                   ),
                 ),
                 onWebViewCreated: (InAppWebViewController controller) {

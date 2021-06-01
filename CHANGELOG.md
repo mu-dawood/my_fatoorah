@@ -1,6 +1,11 @@
+## 3.0.3
+
+* allow apple pay
+
 ## 3.0.2
 
-* add `MyfatoorahRequest.test` 
+* add `MyfatoorahRequest.test`
+
 * add `MyfatoorahRequest.live`
 
 ## 3.0.0
