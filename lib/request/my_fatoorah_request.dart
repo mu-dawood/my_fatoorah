@@ -109,11 +109,21 @@ class MyfatoorahRequest {
   ///The date you want the payment to be expired, if not passed the default is considered from the account profile in the portal
   final DateTime? expiryDate;
 
-  /// The supplier code you need to associate the invoice with, please refer to `Multi Vendors` feature
-  ///
-  /// [https://myfatoorah.readme.io/docs/multi-vendors]
-  final String? supplierCode;
+  ///Array of InvoiceItemModel objects, optional
   final List<InvoiceItem>? invoiceItems;
+
+  /// 1 for DHL
+  /// 2 for ARAMEX
+  final int? shippingMethod;
+
+  /// This parameter is only mandatory if you are creating a Shipping invoice.
+  final ShippingConsignee? shippingConsignee;
+
+  ///This parameter is only mandatory if you are using the Multi-Vendors feature.
+
+  final List<Supplier>? suppliers;
+  final RecurringModel? recurringModel;
+
   @Deprecated("Use `MyfatoorahRequest.test` or MyfatoorahRequest.live")
   MyfatoorahRequest({
     required this.token,
@@ -122,6 +132,7 @@ class MyfatoorahRequest {
     required this.successUrl,
     required this.errorUrl,
     required this.currencyIso,
+    this.shippingConsignee,
     this.mobileCountryCode,
     this.initiatePaymentUrl,
     this.executePaymentUrl,
@@ -134,8 +145,10 @@ class MyfatoorahRequest {
     this.userDefinedField,
     this.customerAddress,
     this.expiryDate,
-    this.supplierCode,
+    this.suppliers,
+    this.shippingMethod,
     this.invoiceItems,
+    this.recurringModel,
   });
 
   MyfatoorahRequest.live({
@@ -145,6 +158,7 @@ class MyfatoorahRequest {
     required this.successUrl,
     required this.errorUrl,
     required this.currencyIso,
+    this.shippingConsignee,
     this.mobileCountryCode,
     this.initiatePaymentUrl,
     this.executePaymentUrl,
@@ -156,8 +170,10 @@ class MyfatoorahRequest {
     this.userDefinedField,
     this.customerAddress,
     this.expiryDate,
-    this.supplierCode,
+    this.suppliers,
+    this.shippingMethod,
     this.invoiceItems,
+    this.recurringModel,
   }) : url = "https://api.myfatoorah.com";
   MyfatoorahRequest.test({
     required this.token,
@@ -166,6 +182,7 @@ class MyfatoorahRequest {
     required this.successUrl,
     required this.errorUrl,
     required this.currencyIso,
+    this.shippingConsignee,
     this.mobileCountryCode,
     this.initiatePaymentUrl,
     this.executePaymentUrl,
@@ -177,8 +194,10 @@ class MyfatoorahRequest {
     this.userDefinedField,
     this.customerAddress,
     this.expiryDate,
-    this.supplierCode,
+    this.suppliers,
+    this.shippingMethod,
     this.invoiceItems,
+    this.recurringModel,
   }) : url = "https://apitest.myfatoorah.com";
   Map<String, dynamic> excutePaymentRequest(int paymentMethod) {
     var data = {
@@ -197,10 +216,15 @@ class MyfatoorahRequest {
       "UserDefinedField": userDefinedField,
       "CustomerAddress": customerAddress?.toJson(),
       "ExpiryDate": expiryDate?.toUtc().toIso8601String(),
-      "SupplierCode": supplierCode,
       "InvoiceItems": invoiceItems?.map<Map<String, dynamic>>((e) {
         return e.toJson();
       }).toList(),
+      "ShippingMethod": shippingMethod,
+      "ShippingConsignee": shippingConsignee?.toJson(),
+      "Suppliers": suppliers?.map<Map<String, dynamic>>((e) {
+        return e.toJson();
+      }).toList(),
+      "RecurringModel": recurringModel?.toJson(),
     };
     data.removeWhere((key, value) => value == null);
     return data;
