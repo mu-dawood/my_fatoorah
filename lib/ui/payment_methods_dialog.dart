@@ -1,5 +1,8 @@
 part of my_fatoorah;
 
+typedef DirectPaymentCallBack = Widget Function(
+    Future Function(DirectPayment model) callBack);
+
 class LoadingState {
   final bool loading;
   final String? error;
@@ -18,6 +21,7 @@ class _PaymentMethodsBuilder extends StatefulWidget {
   final Widget? succcessChild;
   final AfterPaymentBehaviour afterPaymentBehaviour;
   final Function(PaymentResponse res)? onResult;
+  final DirectPaymentCallBack? directPayment;
 
   /// Filter payment methods after fetching it
   final List<PaymentMethod> Function(List<PaymentMethod> methods)?
@@ -33,6 +37,7 @@ class _PaymentMethodsBuilder extends StatefulWidget {
     this.getAppBar,
     this.filterPaymentMethods,
     this.onResult,
+    this.directPayment,
   }) : super(key: key);
   @override
   _PaymentMethodsBuilderState createState() => _PaymentMethodsBuilderState();
@@ -85,6 +90,33 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
     });
   }
 
+  Future<_DirectPaymentResponse?> directPayment(
+      String url, DirectPayment model) {
+    return http
+        .post(Uri.parse(url), body: jsonEncode(model.toJson()), headers: {
+      "Content-Type": "application/json",
+      "Authorization":
+          "bearer ${widget.request.token.replaceAll("bearer ", "")}",
+    }).then((response) {
+      if (response.statusCode == 200) {
+        var json = jsonDecode(response.body);
+        var res = _DirectPaymentResponse.fromJson(json);
+        if (res.isSuccess)
+          return res;
+        else
+          throw res.message;
+      } else {
+        throw response.body;
+      }
+    }).catchError((e) {
+      print(e);
+      setState(() {
+        loading = false;
+        errorMessage = e.toString();
+      });
+    });
+  }
+
   @override
   void initState() {
     loadMethods();
@@ -120,7 +152,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
         var result =
             await _PaymentMethodItem.loadExcustion(widget.request, method);
         if (!result.isSuccess) throw result.message;
-        return _showWebView(result.data!.paymentURL);
+        return _showWebViewOrDirectPayment(result.data!);
       });
     if (loading == true) {
       return buildLoading();
@@ -148,14 +180,31 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
                 showServiceCharge: widget.showServiceCharge,
                 method: method.withLangauge(widget.request.language),
                 request: widget.request,
-                onLaunch: (String _url) {
-                  _showWebView(_url);
+                onLaunch: (_data) {
+                  _showWebViewOrDirectPayment(_data);
                 },
               )
           ],
         ).toList(),
       );
     }
+  }
+
+  Future<PaymentResponse> _showWebViewOrDirectPayment(
+      ExcutePaymentResponseData data) async {
+    if (data.isDirectPayment && widget.directPayment != null) {
+      _DirectPaymentResponse? res = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => widget.directPayment!((model) async {
+            var res = await directPayment(data.paymentURL, model);
+            Navigator.of(context).pop(res);
+          }),
+        ),
+      );
+      return _showWebView(res!.data!.paymentURL);
+    } else
+      return _showWebView(data.paymentURL);
   }
 
   Future<PaymentResponse> _showWebView(String url) async {

@@ -3,7 +3,7 @@ part of my_fatoorah;
 class _PaymentMethodItem extends StatefulWidget {
   final PaymentMethod method;
   final MyfatoorahRequest request;
-  final Function(String url) onLaunch;
+  final Function(ExcutePaymentResponseData data) onLaunch;
   final bool showServiceCharge;
 
   const _PaymentMethodItem({
@@ -54,7 +54,7 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
       setState(() {
         loading = false;
       });
-      widget.onLaunch(response.data!.paymentURL);
+      widget.onLaunch(response.data!);
     }).catchError(showError);
   }
 

@@ -3,6 +3,7 @@ library my_fatoorah;
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:http/http.dart' as http;
@@ -13,12 +14,14 @@ part './enums/other.dart';
 part './request/customer_address.dart';
 part './request/consignee.dart';
 part './request/supplier.dart';
+part './request/direct_payment.dart';
 part './request/recurring_model.dart';
 part './request/invoice_item.dart';
 part './request/my_fatoorah_request.dart';
 part './response/Initiate_payment_response.dart';
 part './response/base_response.dart';
 part './response/excute_payment_response.dart';
+part './response/direct_payment_response.dart';
 part './response/payment_method.dart';
 part './response/payment_response.dart';
 part './ui/payment_method.dart';
@@ -55,8 +58,9 @@ class MyFatoorah extends StatelessWidget {
     PreferredSizeWidget Function(BuildContext context)? buildAppBar,
 
     /// Filter payment methods after fetching it
-    final List<PaymentMethod> Function(List<PaymentMethod> methods)?
+    List<PaymentMethod> Function(List<PaymentMethod> methods)?
         filterPaymentMethods,
+    DirectPaymentCallBack? directPayment,
   }) {
     return showDialog(
       context: context,
@@ -64,6 +68,7 @@ class MyFatoorah extends StatelessWidget {
         return Dialog(
           child: _PaymentMethodsBuilder(
             errorChild: errorChild,
+            directPayment: directPayment,
             getAppBar: buildAppBar,
             onResult: null,
             succcessChild: succcessChild,
@@ -112,6 +117,7 @@ class MyFatoorah extends StatelessWidget {
   final AfterPaymentBehaviour afterPaymentBehaviour;
   //Note if you ovveride leading please use maybepop instead of pop
   final PreferredSizeWidget Function(BuildContext context)? buildAppBar;
+  final DirectPaymentCallBack? directPayment;
   const MyFatoorah({
     Key? key,
     this.builder,
@@ -123,6 +129,7 @@ class MyFatoorah extends StatelessWidget {
     this.buildAppBar,
     this.filterPaymentMethods,
     this.onResult,
+    this.directPayment,
   }) : super(key: key);
 
   @override
@@ -136,6 +143,7 @@ class MyFatoorah extends StatelessWidget {
       succcessChild: succcessChild,
       onResult: onResult ?? (v) {},
       showServiceCharge: showServiceCharge,
+      directPayment: directPayment,
       builder: builder,
     );
   }

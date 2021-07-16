@@ -1,3 +1,7 @@
+## 3.0.5
+
+* add direct payment
+
 ## 3.0.3
 
 * allow apple pay

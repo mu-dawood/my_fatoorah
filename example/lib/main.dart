@@ -71,6 +71,26 @@ class InnerPage extends StatelessWidget {
       body: Builder(
         builder: (BuildContext context) {
           return MyFatoorah(
+            directPayment: (callBack) => Scaffold(
+              appBar: AppBar(),
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    callBack(DirectPayment(
+                      card: CardInfo(
+                        expiryMonth: '12',
+                        expiryYear: '25',
+                        holderName: 'test test',
+                        number: '5453010000095539',
+                        securityCode: '300',
+                      ),
+                      paymentType: 'card',
+                    )).then((value) {});
+                  },
+                  child: Text('Direct payment'),
+                ),
+              ),
+            ),
             buildAppBar: (callback) => AppBar(
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
