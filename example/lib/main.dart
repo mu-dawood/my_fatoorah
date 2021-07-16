@@ -71,26 +71,7 @@ class InnerPage extends StatelessWidget {
       body: Builder(
         builder: (BuildContext context) {
           return MyFatoorah(
-            directPayment: (callBack) => Scaffold(
-              appBar: AppBar(),
-              body: Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    callBack(DirectPayment(
-                      card: CardInfo(
-                        expiryMonth: '12',
-                        expiryYear: '25',
-                        holderName: 'test test',
-                        number: '5453010000095539',
-                        securityCode: '300',
-                      ),
-                      paymentType: 'card',
-                    )).then((value) {});
-                  },
-                  child: Text('Direct payment'),
-                ),
-              ),
-            ),
+            directPayment: (callBack) => CardWidget(callBack: callBack),
             buildAppBar: (callback) => AppBar(
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
@@ -131,6 +112,38 @@ class InnerPage extends StatelessWidget {
             },
           );
         },
+      ),
+    );
+  }
+}
+
+class CardWidget extends StatelessWidget {
+  final Future<dynamic> Function(DirectPayment) callBack;
+  const CardWidget({
+    Key key,
+    this.callBack,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            callBack(DirectPayment(
+              card: CardInfo(
+                expiryMonth: '12',
+                expiryYear: '25',
+                holderName: 'test test',
+                number: '5453010000095539',
+                securityCode: '300',
+              ),
+              paymentType: 'card',
+            )).then((value) {});
+          },
+          child: Text('Direct payment'),
+        ),
       ),
     );
   }
