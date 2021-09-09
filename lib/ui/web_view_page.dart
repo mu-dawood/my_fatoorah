@@ -133,7 +133,6 @@ class __WebViewPageState extends State<_WebViewPage>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             AnimatedSize(
-              vsync: this,
               duration: Duration(milliseconds: 300),
               child: SizedBox(
                 height: progress == null ? 0 : 5,

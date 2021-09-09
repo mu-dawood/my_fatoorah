@@ -73,7 +73,6 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
   @override
   Widget build(BuildContext context) {
     return AnimatedSize(
-      vsync: this,
       duration: Duration(milliseconds: 300),
       child: Column(
         mainAxisSize: MainAxisSize.min,

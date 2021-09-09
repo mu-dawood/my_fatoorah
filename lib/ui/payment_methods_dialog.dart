@@ -138,7 +138,6 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
         return false;
       },
       child: AnimatedSize(
-        vsync: this,
         duration: Duration(milliseconds: 300),
         child: buildChild(),
       ),

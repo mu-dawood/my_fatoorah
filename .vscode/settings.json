@@ -1,5 +1,15 @@
 {
     "git.ignoreLimitWarning": true,
     "java.configuration.updateBuildConfiguration": "automatic",
-    "dart.flutterSdkPath": "C:\\flutter\\flutter_beta"
+    "dart.flutterSdkPath": "C:\\flutter\\flutter_beta",
+    "actionButtons": {
+        "commands": [
+            {
+                "name": "Puplish pup",
+                "color": "orange",
+                "command": "flutter pub publish"
+            },
+           
+        ]
+    },
 }
