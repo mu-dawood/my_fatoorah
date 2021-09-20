@@ -3,7 +3,10 @@ part of my_fatoorah;
 class PaymentMethod {
   int? paymentMethodId;
   late String _paymentMethodAr;
+  String get paymentMethodAr => _paymentMethodAr;
   late String _paymentMethodEn;
+  String get paymentMethodEn => _paymentMethodEn;
+
   String get paymentMethod =>
       language == ApiLanguage.English ? _paymentMethodEn : _paymentMethodAr;
   late String paymentMethodCode;
