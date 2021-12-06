@@ -8,6 +8,7 @@ enum Country {
   Qatar,
   Oman,
   Jordan,
+  Egypt,
 }
 
 Map<Country, String> _currencies = {
@@ -18,6 +19,7 @@ Map<Country, String> _currencies = {
   Country.Qatar: "QAR",
   Country.Oman: "OMR",
   Country.Jordan: "JOD",
+  Country.Egypt: "EGY",
 };
 
 Map<Country, String> mobiles = {
@@ -28,4 +30,5 @@ Map<Country, String> mobiles = {
   Country.Qatar: "+974",
   Country.Oman: "+968",
   Country.Jordan: "+962",
+  Country.Egypt: "+20",
 };

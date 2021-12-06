@@ -1,3 +1,7 @@
+## 3.0.7
+
+* add egypt to iso codes
+
 ## 3.0.5
 
 * add direct payment
