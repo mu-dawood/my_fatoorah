@@ -3,12 +3,18 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:my_fatoorah/my_fatoorah.dart';
 
+void main() {
+  runApp(const MaterialApp(home: Example()));
+}
+
 class Example extends StatelessWidget {
+  const Example({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('my_fatoorah Demo'),
+        title: const Text('my_fatoorah Demo'),
       ),
       body: Center(
         child: Container(
