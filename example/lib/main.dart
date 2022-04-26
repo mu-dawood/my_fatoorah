@@ -24,6 +24,9 @@ class Example extends StatelessWidget {
             onPressed: () async {
               var response = await MyFatoorah.startPayment(
                 context: context,
+                successChild: const Icon(Icons.abc),
+                // afterPaymentBehaviour:
+                //     AfterPaymentBehaviour.BeforeCallbackExecution,
                 request: MyfatoorahRequest.test(
                   currencyIso: Country.SaudiArabia,
                   successUrl: 'https://pub.dev/packages/get',

@@ -1,8 +1,8 @@
 part of my_fatoorah;
 
 enum AfterPaymentBehaviour {
-  BeforeCalbacksExecution,
-  AfterCalbacksExecution,
+  BeforeCallbackExecution,
+  AfterCallbackExecution,
   None,
 }
 

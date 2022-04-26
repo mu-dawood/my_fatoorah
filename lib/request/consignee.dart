@@ -4,7 +4,7 @@ class ShippingConsignee {
   final String personName;
   final String mobile;
   final String emailAddress;
-  final String lineAddres;
+  final String lineAddress;
   final String cityName;
   final String? postalCode;
   final String countryCode;
@@ -12,7 +12,7 @@ class ShippingConsignee {
     required this.personName,
     required this.mobile,
     required this.emailAddress,
-    required this.lineAddres,
+    required this.lineAddress,
     required this.cityName,
     this.postalCode,
     required this.countryCode,
@@ -23,7 +23,7 @@ class ShippingConsignee {
       "PersonName": personName,
       "Mobile": mobile,
       "EmailAddress": emailAddress,
-      "LineAddress": lineAddres,
+      "LineAddress": lineAddress,
       "CityName": cityName,
       "PostalCode": postalCode,
       "CountryCode": countryCode,

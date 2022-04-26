@@ -38,7 +38,7 @@ class PaymentMethod {
     currencyIso = json['CurrencyIso'] ?? json['currencyIso'] ?? "";
     imageUrl = json['ImageUrl'] ?? json['imageUrl'] ?? "";
   }
-  PaymentMethod withLangauge(ApiLanguage _language) {
+  PaymentMethod withLanguage(ApiLanguage _language) {
     return PaymentMethod.fromJson({})
       .._paymentMethodAr = _paymentMethodAr
       .._paymentMethodEn = _paymentMethodEn

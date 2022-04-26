@@ -18,7 +18,7 @@ class _PaymentMethodsBuilder extends StatefulWidget {
   final Widget Function(List<PaymentMethod> methods, LoadingState state,
       Future<PaymentResponse> Function(PaymentMethod submit) onSelect)? builder;
   final Widget? errorChild;
-  final Widget? succcessChild;
+  final Widget? successChild;
   final AfterPaymentBehaviour afterPaymentBehaviour;
   final Function(PaymentResponse res)? onResult;
   final DirectPaymentCallBack? directPayment;
@@ -32,7 +32,7 @@ class _PaymentMethodsBuilder extends StatefulWidget {
     this.builder,
     required this.showServiceCharge,
     this.errorChild,
-    this.succcessChild,
+    this.successChild,
     required this.afterPaymentBehaviour,
     this.getAppBar,
     this.filterPaymentMethods,
@@ -54,7 +54,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
         '${widget.request.url}/v2/InitiatePayment';
 
     return http.post(Uri.parse(url),
-        body: jsonEncode(widget.request.intiatePaymentRequest()),
+        body: jsonEncode(widget.request.initiatePaymentRequest()),
         headers: {
           "Content-Type": "application/json",
           "Authorization":
@@ -69,7 +69,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
         setState(() {
           methods = _response.isSuccess
               ? _response.data!.paymentMethods
-                  .map((e) => e.withLangauge(widget.request.language))
+                  .map((e) => e.withLanguage(widget.request.language))
                   .toList()
               : [];
           errorMessage = _response.isSuccess ? null : _response.message;
@@ -149,7 +149,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
       return widget.builder!(methods, LoadingState(loading, errorMessage),
           (method) async {
         var result =
-            await _PaymentMethodItem.loadExcustion(widget.request, method);
+            await _PaymentMethodItem.loadExecution(widget.request, method);
         if (!result.isSuccess) throw result.message;
         return _showWebViewOrDirectPayment(result.data!);
       });
@@ -177,7 +177,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
             for (var method in methods)
               _PaymentMethodItem(
                 showServiceCharge: widget.showServiceCharge,
-                method: method.withLangauge(widget.request.language),
+                method: method.withLanguage(widget.request.language),
                 request: widget.request,
                 onLaunch: (_data) {
                   _showWebViewOrDirectPayment(_data);
@@ -190,7 +190,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
   }
 
   Future<PaymentResponse> _showWebViewOrDirectPayment(
-      ExcutePaymentResponseData data) async {
+      ExecutePaymentResponseData data) async {
     if (data.isDirectPayment && widget.directPayment != null) {
       _DirectPaymentResponse? res = await Navigator.push(
         context,
@@ -214,7 +214,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
           uri: Uri.parse(url),
           getAppBar: widget.getAppBar,
           errorChild: widget.errorChild,
-          succcessChild: widget.succcessChild,
+          successChild: widget.successChild,
           successUrl: widget.request.successUrl,
           errorUrl: widget.request.errorUrl,
           afterPaymentBehaviour: widget.afterPaymentBehaviour,

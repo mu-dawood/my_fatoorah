@@ -2,11 +2,11 @@ part of my_fatoorah;
 
 ///The request that will be send to may fatoorah api
 ///
-///first thing we do is to fetch payment methods as discriped in their docs
+///first thing we do is to fetch payment methods as described in their docs
 ///
 ///[https://myfatoorah.readme.io/docs/api-initiate-payment]
 ///
-///Then we make the excute payment as discriped here
+///Then we make the execute payment as described here
 ///
 ///[https://myfatoorah.readme.io/docs/api-execute-payment]
 ///
@@ -49,11 +49,11 @@ class MyfatoorahRequest {
   /// The amount you are seeking to charge the customer and accepts decimal value e.g. 2.500
   final double invoiceAmount;
 
-  /// Callback that will be called after payment success note that this url prefered to return html content with
+  /// Callback that will be called after payment success note that this url preferred to return html content with
   /// success message
   ///
   /// The api will call this url with a query string `paymentId` so the back end developer can validate
-  /// the payment  by folowing this docs
+  /// the payment  by following this docs
   ///
   /// [https://myfatoorah.readme.io/docs/api-payment-enquiry]
   ///
@@ -199,7 +199,7 @@ class MyfatoorahRequest {
     this.invoiceItems,
     this.recurringModel,
   }) : url = "https://apitest.myfatoorah.com";
-  Map<String, dynamic> excutePaymentRequest(int paymentMethod) {
+  Map<String, dynamic> executePaymentRequest(int paymentMethod) {
     var data = {
       "PaymentMethodId": paymentMethod,
       "CustomerName": customerName,
@@ -230,7 +230,7 @@ class MyfatoorahRequest {
     return data;
   }
 
-  Map<String, dynamic> intiatePaymentRequest() {
+  Map<String, dynamic> initiatePaymentRequest() {
     return {
       "currencyIso": _currencies[currencyIso],
       "invoiceAmount": invoiceAmount,

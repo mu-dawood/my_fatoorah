@@ -1,23 +1,23 @@
 part of my_fatoorah;
 
-class _ExcutePaymentResponse
-    extends _MyFatoorahResponse<ExcutePaymentResponseData> {
-  _ExcutePaymentResponse.fromJson(Map<String, dynamic> json)
+class _ExecutePaymentResponse
+    extends _MyFatoorahResponse<ExecutePaymentResponseData> {
+  _ExecutePaymentResponse.fromJson(Map<String, dynamic> json)
       : super.fromJson(json);
   @override
-  ExcutePaymentResponseData mapData(Map<String, dynamic> json) {
-    return ExcutePaymentResponseData.fromJson(json);
+  ExecutePaymentResponseData mapData(Map<String, dynamic> json) {
+    return ExecutePaymentResponseData.fromJson(json);
   }
 }
 
-class ExcutePaymentResponseData {
+class ExecutePaymentResponseData {
   int? invoiceId;
   late bool isDirectPayment;
   late String paymentURL;
   late String customerReference;
   late String userDefinedField;
 
-  ExcutePaymentResponseData.fromJson(Map<String, dynamic> json) {
+  ExecutePaymentResponseData.fromJson(Map<String, dynamic> json) {
     invoiceId = int.tryParse(
         (json['InvoiceId'] ?? json['invoiceId'])?.toString() ?? "");
     isDirectPayment =

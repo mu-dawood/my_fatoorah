@@ -3,7 +3,7 @@ part of my_fatoorah;
 class _PaymentMethodItem extends StatefulWidget {
   final PaymentMethod method;
   final MyfatoorahRequest request;
-  final Function(ExcutePaymentResponseData data) onLaunch;
+  final Function(ExecutePaymentResponseData data) onLaunch;
   final bool showServiceCharge;
 
   const _PaymentMethodItem({
@@ -16,18 +16,19 @@ class _PaymentMethodItem extends StatefulWidget {
   @override
   __PaymentMethodItemState createState() => __PaymentMethodItemState();
 
-  static Future<_ExcutePaymentResponse> loadExcustion(
+  static Future<_ExecutePaymentResponse> loadExecution(
       MyfatoorahRequest request, PaymentMethod method) {
     var url = request.executePaymentUrl ?? '${request.url}/v2/ExecutePayment';
     return http.post(Uri.parse(url),
-        body: jsonEncode(request.excutePaymentRequest(method.paymentMethodId!)),
+        body:
+            jsonEncode(request.executePaymentRequest(method.paymentMethodId!)),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "bearer ${request.token.replaceAll("bearer ", "")}"
         }).then((response) {
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
-        var _response = _ExcutePaymentResponse.fromJson(json);
+        var _response = _ExecutePaymentResponse.fromJson(json);
         if (_response.isSuccess) {
           return _response;
         } else {
@@ -49,7 +50,7 @@ class __PaymentMethodItemState extends State<_PaymentMethodItem>
     setState(() {
       loading = true;
     });
-    return _PaymentMethodItem.loadExcustion(widget.request, widget.method)
+    return _PaymentMethodItem.loadExecution(widget.request, widget.method)
         .then((response) {
       setState(() {
         loading = false;

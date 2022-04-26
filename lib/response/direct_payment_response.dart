@@ -27,12 +27,12 @@ class DirectPaymentResponseData {
     recurringId = json['RecurringId'] ?? json['recurringId'];
     paymentURL = json['PaymentURL'] ?? json['paymentURL'];
     cardInfo =
-        CardInfoResponse.fromjson(json['CardInfo'] ?? json['cardInfo'] ?? {});
+        CardInfoResponse.fromJson(json['CardInfo'] ?? json['cardInfo'] ?? {});
   }
 }
 
 class CardInfoResponse {
-  CardInfoResponse.fromjson(Map<String, dynamic> json) {
+  CardInfoResponse.fromJson(Map<String, dynamic> json) {
     number = json["Number"] ?? json["number"];
     expiryMonth = json["ExpiryMonth"] ?? json["expiryMonth"];
     expiryYear = json["ExpiryYear"] ?? json["expiryYear"];

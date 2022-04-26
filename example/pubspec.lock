@@ -40,7 +40,7 @@ packages:
       name: flutter_inappwebview
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.4.1"
+    version: "5.4.2"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -89,7 +89,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.0.8"
+    version: "3.0.10"
   path:
     dependency: transitive
     description:

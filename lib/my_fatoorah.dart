@@ -3,7 +3,6 @@ library my_fatoorah;
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:http/http.dart' as http;
@@ -11,17 +10,17 @@ import 'package:http/http.dart' as http;
 part './enums/currency_iso.dart';
 part './enums/language.dart';
 part './enums/other.dart';
-part './request/customer_address.dart';
 part './request/consignee.dart';
-part './request/supplier.dart';
+part './request/customer_address.dart';
 part './request/direct_payment.dart';
-part './request/recurring_model.dart';
 part './request/invoice_item.dart';
 part './request/my_fatoorah_request.dart';
+part './request/recurring_model.dart';
+part './request/supplier.dart';
 part './response/Initiate_payment_response.dart';
 part './response/base_response.dart';
-part './response/excute_payment_response.dart';
 part './response/direct_payment_response.dart';
+part './response/excute_payment_response.dart';
 part './response/payment_method.dart';
 part './response/payment_response.dart';
 part './ui/payment_method.dart';
@@ -36,7 +35,7 @@ class MyFatoorah extends StatelessWidget {
 
     /// user this to build your own ui and then at the end call submit
     /// submit method is future so you can wait it
-    /// thev default is `ListView`
+    /// the default is `ListView`
     Widget Function(List<PaymentMethod> methods, LoadingState state,
             Future Function(PaymentMethod method) submit)?
         builder,
@@ -44,17 +43,17 @@ class MyFatoorah extends StatelessWidget {
     //Will be shown after failed payment `afterPaymentBehaviour must be none`
     Widget? errorChild,
     //Will be shown after success payment `afterPaymentBehaviour must be none`
-    Widget? succcessChild,
+    Widget? successChild,
 
-    /// this will controles what happen after payment done
+    /// this will controls what happen after payment done
     ///
-    /// `AfterPaymentBehaviour.None` the default value , nothing will happen
+    /// [AfterPaymentBehaviour.None] the default value , nothing will happen
     ///
-    /// `AfterPaymentBehaviour.AfterCalbacksExecution` will pop after payment done and error or success callbacks finish
+    /// [AfterPaymentBehaviour.AfterCallbackExecution] will pop after payment done and error or success callbacks finish
     ///
-    /// `AfterPaymentBehaviour.BeforeCalbacksExecution` will pop after payment done and before error or success callbacks start
+    /// [AfterPaymentBehaviour.BeforeCallbackExecution] will pop after payment done and before error or success callbacks start
     AfterPaymentBehaviour afterPaymentBehaviour = AfterPaymentBehaviour.None,
-    //Note if you ovveride leading please use maybepop instead of pop
+    //Note if you override leading please use mayBePop instead of pop
     PreferredSizeWidget Function(BuildContext context)? buildAppBar,
 
     /// Filter payment methods after fetching it
@@ -71,7 +70,7 @@ class MyFatoorah extends StatelessWidget {
             directPayment: directPayment,
             getAppBar: buildAppBar,
             onResult: null,
-            succcessChild: succcessChild,
+            successChild: successChild,
             filterPaymentMethods: filterPaymentMethods,
             afterPaymentBehaviour: afterPaymentBehaviour,
             request: request,
@@ -90,7 +89,7 @@ class MyFatoorah extends StatelessWidget {
 
   /// user this to build your own ui and then at the end call submit
   /// submit method is future so you can wait it
-  /// thev default is `ListView`
+  /// the default is `ListView`
   final Widget Function(List<PaymentMethod> methods, LoadingState state,
       Future<PaymentResponse> Function(PaymentMethod method) submit)? builder;
 
@@ -104,18 +103,19 @@ class MyFatoorah extends StatelessWidget {
   //Will be shown after failed payment `afterPaymentBehaviour must be none`
   final Widget? errorChild;
   //Will be shown after error payment `afterPaymentBehaviour must be none`
-  final Widget? succcessChild;
+  final Widget? successChild;
   final Function(PaymentResponse res)? onResult;
 
-  /// this will controles what happen after payment done
+  /// this will controls what happen after payment done
   ///
-  /// `AfterPaymentBehaviour.None` the default value , nothing will happen
+  /// [AfterPaymentBehaviour.None] the default value , nothing will happen
   ///
-  /// `AfterPaymentBehaviour.AfterCalbacksExecution` will pop after payment done and error or success callbacks finish
+  /// [AfterPaymentBehaviour.AfterCallbackExecution] will pop after payment done and error or success callbacks finish
   ///
-  /// `AfterPaymentBehaviour.BeforeCalbacksExecution` will pop after payment done and before error or success callbacks start
+  /// [AfterPaymentBehaviour.BeforeCallbackExecution] will pop after payment done and before error or success callbacks start
   final AfterPaymentBehaviour afterPaymentBehaviour;
-  //Note if you ovveride leading please use maybepop instead of pop
+
+  /// Note if you override leading please use mayBePop instead of pop
   final PreferredSizeWidget Function(BuildContext context)? buildAppBar;
   final DirectPaymentCallBack? directPayment;
   const MyFatoorah({
@@ -124,7 +124,7 @@ class MyFatoorah extends StatelessWidget {
     required this.request,
     this.showServiceCharge = false,
     this.errorChild,
-    this.succcessChild,
+    this.successChild,
     this.afterPaymentBehaviour = AfterPaymentBehaviour.None,
     this.buildAppBar,
     this.filterPaymentMethods,
@@ -140,7 +140,7 @@ class MyFatoorah extends StatelessWidget {
       getAppBar: buildAppBar,
       filterPaymentMethods: filterPaymentMethods,
       afterPaymentBehaviour: afterPaymentBehaviour,
-      succcessChild: succcessChild,
+      successChild: successChild,
       onResult: onResult ?? (v) {},
       showServiceCharge: showServiceCharge,
       directPayment: directPayment,
