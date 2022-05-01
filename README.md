@@ -1,34 +1,44 @@
 # my_fatoorah
 
 My Fatoorah Payment
+
 # Screenshots in Test mode
+
 <table>
   <tr>
+
     <td>Payment methods</td>
      <td>Card inputs</td>
      <td>Acs Emulator</td>
      <td>result</td>
+
   </tr>
 
   <tr>
+
     <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_1.png"></td>
     <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_2.png"></td>
     <td><img width="210" src="https://user-images.githubusercontent.com/29352955/164155489-681b62c0-9cff-4ff6-90e8-c9a11db9ffa6.png"></td>
     <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_3.png"></td>
+
   </tr>
  </table>
  
  # Screenshots in Live(Release) mode
 <table>
   <tr>
+
     <td>Payment methods</td>
      <td>Card inputs</td>
      <td>result</td>
+
   </tr>
   <tr>
+
     <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_1.png"></td>
     <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_2.png"></td>
     <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_3.png"></td>
+
   </tr>
  </table>
 
@@ -72,7 +82,6 @@ my_fatoorah: any
   </application>
 ```
 
-
 ## Dialog Usage
 
 ```dart
@@ -94,7 +103,9 @@ import 'dart:developer';
               
 See the example for more details
 ```
+
 Example
+
 ```dart
  var response = await MyFatoorah.startPayment(
                 context: context,
@@ -115,7 +126,9 @@ Result:
 <td><img width="210" src="https://user-images.githubusercontent.com/29352955/164888146-fc3a8c84-8f7a-4512-9a5a-fe148add1506.png"></td>
 
                                     
+
 ## Another usage way => Listview Usage
+
 ```dart
 import 'package:my_fatoorah/my_fatoorah.dart';
 import 'dart:developer';
@@ -140,6 +153,7 @@ import 'dart:developer';
 ```
 
 Example:
+
 ```dart
  MyFatoorah(
                                   onResult: (response) {
@@ -159,13 +173,19 @@ Example:
 
  <td><img src="https://raw.githubusercontent.com/mo-ah-dawood/my_fatoorah/master/screen_1.png"></td>
 
+# Tutorial
+
+You can see the video by [Abdo tarek](https://github.com/AbdoTareq)
+
+[![Video url](https://img.youtube.com/vi/owYamPfa9co/0.jpg)](https://www.youtube.com/watch?v=owYamPfa9co)
 
 ### Notes
 
-- Before version 2.6.7 we handeled test version if you pass token as null
-- But  may  my fatoorah changed their demo information many times so you have to  pass them
+* Before version 2.6.7 we handeled test version if you pass token as null
+* But  may  my fatoorah changed their demo information many times so you have to  pass them
  in MyfatoorahRequest you have to pass url of the test version `https://apitest.myfatoorah.com`
+
  and token of test version
-- you can find demo information here https://myfatoorah.readme.io/docs/demo-information
-- after version 3.0.2 you can use `MyfatoorahRequest.test` or `MyfatoorahRequest.live`
-- After redirected to the success url You will get a paymentId which will help your backend to track the payment status with my fatoorah
+* you can find demo information here https://myfatoorah.readme.io/docs/demo-information
+* after version 3.0.2 you can use `MyfatoorahRequest.test` or `MyfatoorahRequest.live`
+* After redirected to the success url You will get a paymentId which will help your backend to track the payment status with my fatoorah
