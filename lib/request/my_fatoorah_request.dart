@@ -124,32 +124,15 @@ class MyfatoorahRequest {
   final List<Supplier>? suppliers;
   final RecurringModel? recurringModel;
 
-  @Deprecated("Use `MyfatoorahRequest.test` or MyfatoorahRequest.live")
-  MyfatoorahRequest({
-    required this.token,
-    required this.language,
-    required this.invoiceAmount,
-    required this.successUrl,
-    required this.errorUrl,
-    required this.currencyIso,
-    this.shippingConsignee,
-    this.mobileCountryCode,
-    this.initiatePaymentUrl,
-    this.executePaymentUrl,
-    this.customerMobile,
-    this.url = "https://api.myfatoorah.com",
-    this.customerName,
-    this.customerEmail,
-    this.customerReference,
-    this.customerCivilId,
-    this.userDefinedField,
-    this.customerAddress,
-    this.expiryDate,
-    this.suppliers,
-    this.shippingMethod,
-    this.invoiceItems,
-    this.recurringModel,
-  });
+  static String _getUrl(Country country, [String? url]) {
+    if (url != null && url.isNotEmpty) return url;
+    switch (country) {
+      case Country.SaudiArabia:
+        return "https://api-sa.myfatoorah.com";
+      default:
+        return "https://api.myfatoorah.com";
+    }
+  }
 
   MyfatoorahRequest.live({
     required this.token,
@@ -174,7 +157,8 @@ class MyfatoorahRequest {
     this.shippingMethod,
     this.invoiceItems,
     this.recurringModel,
-  }) : url = "https://api.myfatoorah.com";
+    String? url,
+  }) : this.url = _getUrl(currencyIso, url);
   MyfatoorahRequest.test({
     required this.token,
     required this.language,

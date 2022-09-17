@@ -1,3 +1,7 @@
+## 3.1.0
+
+* change ksa url
+
 ## 3.0.7
 
 * add egypt to iso codes
