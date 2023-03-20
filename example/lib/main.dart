@@ -40,7 +40,7 @@ class Example extends StatelessWidget {
               log(response.paymentId.toString());
             },
             splashColor: Colors.blueGrey,
-            child: Text(
+            child: const Text(
               'Show Payment',
               style: TextStyle(
                 color: Colors.white,

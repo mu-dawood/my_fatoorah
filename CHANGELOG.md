@@ -1,3 +1,7 @@
+## 3.2.0
+
+* update dependencies
+
 ## 3.1.0
 
 * change ksa url
