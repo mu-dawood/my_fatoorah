@@ -8,7 +8,7 @@ void main() {
 }
 
 class Example extends StatelessWidget {
-  const Example({Key key}) : super(key: key);
+  const Example({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

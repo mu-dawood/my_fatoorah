@@ -92,12 +92,15 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
 
   Future<_DirectPaymentResponse?> directPayment(
       String url, DirectPayment model) {
-    return http
-        .post(Uri.parse(url), body: jsonEncode(model.toJson()), headers: {
-      "Content-Type": "application/json",
-      "Authorization":
-          "bearer ${widget.request.token.replaceAll("bearer ", "")}",
-    }).then((response) {
+    return http.post(
+      Uri.parse(url),
+      body: jsonEncode(model.toJson()),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization":
+            "bearer ${widget.request.token.replaceAll("bearer ", "")}",
+      },
+    ).then<_DirectPaymentResponse?>((response) {
       if (response.statusCode == 200) {
         var json = jsonDecode(response.body);
         var res = _DirectPaymentResponse.fromJson(json);
@@ -114,6 +117,7 @@ class _PaymentMethodsBuilderState extends State<_PaymentMethodsBuilder>
         loading = false;
         errorMessage = e.toString();
       });
+      return null;
     });
   }
 

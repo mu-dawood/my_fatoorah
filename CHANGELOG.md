@@ -1,3 +1,8 @@
+## 3.3.0
+
+* update dependencies
+* Fix Egypt currency code
+
 ## 3.2.0
 
 * update dependencies

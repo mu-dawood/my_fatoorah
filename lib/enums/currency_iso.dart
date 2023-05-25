@@ -19,7 +19,7 @@ Map<Country, String> _currencies = {
   Country.Qatar: "QAR",
   Country.Oman: "OMR",
   Country.Jordan: "JOD",
-  Country.Egypt: "EGY",
+  Country.Egypt: "EGP",
 };
 
 Map<Country, String> mobiles = {
