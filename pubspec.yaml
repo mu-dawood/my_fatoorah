@@ -1,6 +1,6 @@
 name: my_fatoorah
 description: My Fatoorah Payment SDK Integration works for android and ios
-version: 3.3.0
+version: 3.4.0-beta.1
 homepage: https://github.com/mo-ah-dawood/my_fatoorah
 
 environment:
@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^1.0.0
-  flutter_inappwebview: ^5.7.2+3
+  flutter_inappwebview: ^6.0.0-beta.23
 
 dev_dependencies:
   lints: ^2.1.0

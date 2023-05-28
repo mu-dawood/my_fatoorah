@@ -154,15 +154,11 @@ class __WebViewPageState extends State<_WebViewPage>
         ),
         Expanded(
           child: InAppWebView(
-            initialUrlRequest: URLRequest(url: widget.uri),
-            initialOptions: InAppWebViewGroupOptions(
-              crossPlatform: InAppWebViewOptions(
-                javaScriptEnabled: true,
-                javaScriptCanOpenWindowsAutomatically: true,
-              ),
-              ios: IOSInAppWebViewOptions(
-                applePayAPIEnabled: true,
-              ),
+            initialUrlRequest: URLRequest(url: WebUri(widget.uri.toString())),
+            initialSettings: InAppWebViewSettings(
+              javaScriptEnabled: true,
+              javaScriptCanOpenWindowsAutomatically: true,
+              applePayAPIEnabled: true,
             ),
             onWebViewCreated: (InAppWebViewController controller) {
               this.controller = controller;
@@ -182,13 +178,11 @@ class __WebViewPageState extends State<_WebViewPage>
                 });
               }
             },
-            onLoadError: (InAppWebViewController controller, Uri? uri,
-                int status, String error) {
-              setError(uri, error);
+            onReceivedError: (controller, request, error) {
+              setError(request.url, error.description);
             },
-            onLoadHttpError: (InAppWebViewController controller, Uri? uri,
-                int status, String error) {
-              setError(uri, error);
+            onReceivedHttpError: (controller, request, error) {
+              setError(request.url, error.reasonPhrase ?? '');
             },
             onLoadStop: (InAppWebViewController controller, Uri? uri) {
               setStop(uri);
