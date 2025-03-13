@@ -1,4 +1,10 @@
+# Note
+
+Because of changes in my_fatoorah api itself i can not cotinue this repo
+My fatoorah implemented thier own package => "https://pub.dev/packages/myfatoorah_flutter"
+
 # my_fatoorah
+
 
 My Fatoorah Payment
 
